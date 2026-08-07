@@ -1,8 +1,13 @@
 import type { ReactElement } from "react"
-import { Mascot } from "@/components/hero/Mascot"
+import { Mascot, type Mood } from "@/components/hero/Mascot"
 import { Terminal } from "@/components/hero/Terminal"
 
-export function Hero(): ReactElement {
+interface HeroProps {
+  /** mascot mood override (hover reactions from App) */
+  mood?: Mood
+}
+
+export function Hero({ mood }: HeroProps): ReactElement {
   return (
     <header className="relative overflow-hidden border-b-2 border-line py-14 md:py-[72px] md:pb-20">
       <div className="mx-auto grid max-w-[1080px] grid-cols-1 items-center gap-10 px-6 md:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] md:gap-14">
@@ -43,7 +48,7 @@ export function Hero(): ReactElement {
         </div>
 
         <div className="order-1 md:order-2">
-          <Mascot />
+          <Mascot mood={mood} />
         </div>
       </div>
 
