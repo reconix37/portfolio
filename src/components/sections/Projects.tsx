@@ -2,6 +2,7 @@ import type { ReactElement } from "react"
 import { Window } from "@/components/Window"
 import { Metric } from "@/components/Metric"
 import { Reveal } from "@/components/Reveal"
+import { SectionLabel } from "@/components/SectionLabel"
 import type { Mood } from "@/components/hero/Mascot"
 
 type Project = {
@@ -73,7 +74,8 @@ function ArrowIcon(): ReactElement {
 
 export function Projects({ onMood }: ProjectsProps): ReactElement {
   return (
-    <section id="projects" className="border-b-2 border-line">
+    <section id="projects" className="relative border-b-2 border-line">
+      <SectionLabel text="01 — PROJECTS" />
       <div className="wrap py-14 md:py-[72px]">
         <Reveal>
           <Window num="01" title="PROJECTS">

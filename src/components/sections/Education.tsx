@@ -1,6 +1,7 @@
 import type { ReactElement } from "react"
 import { Window } from "@/components/Window"
 import { Reveal } from "@/components/Reveal"
+import { SectionLabel } from "@/components/SectionLabel"
 
 const LANGS = [
   { name: "Ukrainian", level: "NATIVE", width: "100%" },
@@ -11,7 +12,8 @@ const LANGS = [
 
 export function Education(): ReactElement {
   return (
-    <section id="education" className="border-b-2 border-line">
+    <section id="education" className="relative border-b-2 border-line">
+      <SectionLabel text="03 — EDUCATION" />
       <div className="wrap py-14 md:py-[72px]">
         <Reveal>
           <Window num="03" title="EDUCATION">

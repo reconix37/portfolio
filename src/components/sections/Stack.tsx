@@ -1,6 +1,7 @@
 import type { ReactElement } from "react"
 import { Window } from "@/components/Window"
 import { Reveal } from "@/components/Reveal"
+import { SectionLabel } from "@/components/SectionLabel"
 import { cn } from "@/lib/utils"
 
 type Tag = { label: string; hot?: boolean }
@@ -83,7 +84,8 @@ const CATS: { head: ReactElement; tags: Tag[] }[] = [
 
 export function Stack(): ReactElement {
   return (
-    <section id="stack" className="border-b-2 border-line">
+    <section id="stack" className="relative border-b-2 border-line">
+      <SectionLabel text="02 — STACK" />
       <div className="wrap py-14 md:py-[72px]">
         <Reveal>
           <Window num="02" title="STACK">

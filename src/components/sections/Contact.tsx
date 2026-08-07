@@ -1,6 +1,7 @@
 import type { ReactElement } from "react"
 import { Window } from "@/components/Window"
 import { Reveal } from "@/components/Reveal"
+import { SectionLabel } from "@/components/SectionLabel"
 
 type ContactItem = {
   label: string
@@ -61,7 +62,8 @@ const CONTACTS: ContactItem[] = [
 
 export function Contact(): ReactElement {
   return (
-    <section id="contact" className="border-b-2 border-line">
+    <section id="contact" className="relative border-b-2 border-line">
+      <SectionLabel text="04 — CONTACT" />
       <div className="wrap py-14 md:py-[72px]">
         <Reveal>
           <Window num="04" title="CONTACT">
