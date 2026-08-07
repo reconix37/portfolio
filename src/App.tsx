@@ -69,8 +69,17 @@ export default function App(): ReactElement {
     (id: TabId): void => {
       if (id !== tab) tabSfx()
       setTab(id)
+      // маскот реагирует на вкладку (стикер в углу)
+      const TAB_MOOD: Partial<Record<TabId, Mood>> = {
+        projects: "happy",
+        stack: "idle",
+        education: "skeptical",
+        contact: "surprised",
+      }
+      const m = TAB_MOOD[id]
+      if (m) setMoodTemp(m, 1500)
     },
-    [tab, tabSfx],
+    [tab, tabSfx, setMoodTemp],
   )
 
   useEffect(() => {

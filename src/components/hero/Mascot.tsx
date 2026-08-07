@@ -195,11 +195,24 @@ export function FloatingMascot({
     <div className="pointer-events-none fixed right-5 bottom-16 z-40 hidden md:block">
       <div
         className={cn(
-          "border-2 border-line bg-surface p-2 shadow-[4px_4px_0_var(--line)]",
+          "border-2 border-line bg-bg p-1.5 shadow-[4px_4px_0_var(--line)]",
           !reduced && "motion-safe:animate-mascot-bob",
         )}
       >
-        <Mascot mood={mood} size={MASCOT_SIZE_FLOAT} />
+        <div className="relative size-[104px] overflow-hidden border-2 border-line">
+          {MOODS.map((m) => (
+            <img
+              key={m}
+              src={SPRITES[m]}
+              alt=""
+              draggable={false}
+              className={cn(
+                "pointer-events-none absolute top-0 left-1/2 w-[185%] max-w-none -translate-x-1/2 transition-opacity duration-500 ease-in-out",
+                mood === m ? "opacity-100" : "opacity-0",
+              )}
+            />
+          ))}
+        </div>
       </div>
     </div>
   )
