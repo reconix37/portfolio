@@ -1,14 +1,15 @@
 # DANIIL OS — personal site
 
-Персональный сайт Даниила Верховского — AI/ML engineer. Сайт играет роль персональной ОС: терминальный вход, окна-секции, маскот-агент, системные метаданные.
+Персональный сайт Даниила Верховского — AI/ML engineer. Сайт = приложение-окно: вкладки (WHOAMI / PROJECTS / STACK / EDUCATION / CONTACT / RADIO), маскот-агент, терминал, WebAudio chipradio.
 
-Вайб: нео-брутализм / old-web (референс KISA, Poolsuite). Никакого AI-слопа.
+Вайб: нео-брутализм / old-web (референс [KISA](https://mcp.deploychan.webcam/), Poolsuite). Никакого AI-слопа.
 
 ## Stack
 
 - Vite + React 19 + TypeScript
 - Tailwind CSS v4 + shadcn/ui
 - Syne + Space Mono
+- WebAudio API (чиптюн-радио, без внешних треков)
 
 ## Dev
 
@@ -16,6 +17,15 @@
 npm install
 npm run dev
 ```
+
+## Structure
+
+```
+sysbar → AppFrame (titlebar + tabs + panel) → footer
+tabs/: Whoami · Projects · Stack · Education · Contact · Radio
+```
+
+Страница не скроллится — скролл только внутри активной панели.
 
 ## Design system
 
