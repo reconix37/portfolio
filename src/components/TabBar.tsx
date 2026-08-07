@@ -36,7 +36,7 @@ export function TabBar({ active, onChange }: TabBarProps): ReactElement {
             tabIndex={isActive ? 0 : -1}
             onClick={() => onChange(tab.id)}
             className={cn(
-              "shrink-0 border-2 border-line px-3 py-2.5 font-mono text-[11px] tracking-[0.1em] uppercase transition-colors",
+              "shrink-0 border-2 border-line px-3.5 py-2.5 font-mono text-[12px] tracking-[0.1em] uppercase transition-colors md:text-[13px]",
               "min-h-11 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent",
               isActive
                 ? "bg-accent text-bg dark:text-[#121110]"

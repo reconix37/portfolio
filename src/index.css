@@ -126,6 +126,7 @@
   --font-display: "Syne", sans-serif;
   --font-mono: "Space Mono", ui-monospace, monospace;
   --font-sans: "Space Mono", ui-monospace, monospace;
+  --font-quote: "Instrument Serif", Georgia, "Times New Roman", serif;
   --radius: 0rem;
   --radius-sm: 0rem;
   --radius-md: 0rem;
@@ -165,7 +166,7 @@
   --animate-bandmove: bandmove 28s linear infinite;
   --animate-mascot-bob: mascot-bob 3.5s ease-in-out infinite;
   --animate-mascot-jump: mascot-jump 0.4s ease-out;
-  --animate-tickermove: tickermove 42s linear infinite;
+  --animate-tickermove: tickermove 90s linear infinite;
 }
 
 @keyframes blink {
@@ -235,8 +236,15 @@
   .dark .btn-solid { color: #121110; }
   .dark .btn-line:hover { color: #121110; }
 
-  /* page wrap */
-  .wrap { @apply mx-auto max-w-[1080px] px-6; }
+  /* page wrap — шире на десктопе, чтобы шапка не выглядела крошечной */
+  .wrap { @apply mx-auto max-w-[1280px] px-5 sm:px-6 lg:px-8; }
+
+  @media (min-width: 1280px) {
+    html { font-size: 17px; }
+  }
+  @media (min-width: 1536px) {
+    html { font-size: 18px; }
+  }
 }
 
 @layer utilities {

@@ -33,7 +33,7 @@ export function Footer({ onOpenChangelog }: FooterProps): ReactElement {
         </div>
         <div className="flex gap-[18px]">
           <span>© 2026</span>
-          <span>made with too much coffee</span>
+          <span>made with too many tokens</span>
         </div>
       </div>
     </footer>

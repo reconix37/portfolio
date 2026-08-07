@@ -121,7 +121,7 @@ export function Mascot({
           height={size}
           draggable={false}
           className={cn(
-            "pointer-events-none absolute inset-0 size-full max-w-none object-contain transition-opacity duration-200 ease-out",
+            "pointer-events-none absolute inset-0 size-full max-w-none object-contain transition-opacity duration-700 ease-in-out",
             displayMood === m ? "opacity-100" : "opacity-0",
           )}
         />

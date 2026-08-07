@@ -34,6 +34,38 @@ export default function App(): ReactElement {
     moodTimer.current = window.setTimeout(() => setMood("idle"), ms)
   }, [])
 
+  // по очереди: idle → happy → idle → surprised → idle → skeptical → …
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)")
+    if (mq.matches) return
+
+    const SEQUENCE: Mood[] = ["happy", "surprised", "skeptical"]
+    let idx = 0
+    let timeout = 0
+    let alive = true
+
+    const HOLD_MS = 7000 // сколько держать лицо
+    const IDLE_MS = 11000 // пауза на idle между сменами
+    const FIRST_DELAY_MS = 8000
+
+    const scheduleIdleThenNext = (delay: number): void => {
+      timeout = window.setTimeout(() => {
+        if (!alive) return
+        const next = SEQUENCE[idx % SEQUENCE.length]!
+        idx += 1
+        setMoodTemp(next, HOLD_MS)
+        // после удержания + небольшой запас на кроссфейд — снова idle-пауза
+        scheduleIdleThenNext(HOLD_MS + 800 + IDLE_MS)
+      }, delay)
+    }
+
+    scheduleIdleThenNext(FIRST_DELAY_MS)
+    return () => {
+      alive = false
+      window.clearTimeout(timeout)
+    }
+  }, [setMoodTemp])
+
   const changeTab = useCallback(
     (id: TabId): void => {
       if (id !== tab) tabSfx()
@@ -41,31 +73,6 @@ export default function App(): ReactElement {
     },
     [tab, tabSfx],
   )
-
-  useEffect(() => {
-    const panel = panelRef.current
-    if (!panel) return
-    let lastY = panel.scrollTop
-    let cooldownUntil = 0
-
-    const onScroll = (): void => {
-      const now = Date.now()
-      if (now < cooldownUntil) {
-        lastY = panel.scrollTop
-        return
-      }
-      const y = panel.scrollTop
-      const dy = y - lastY
-      lastY = y
-      if (Math.abs(dy) < 40) return
-      cooldownUntil = now + 1200
-      if (dy > 0) setMoodTemp("skeptical", 700)
-      else setMoodTemp("surprised", 700)
-    }
-
-    panel.addEventListener("scroll", onScroll, { passive: true })
-    return () => panel.removeEventListener("scroll", onScroll)
-  }, [setMoodTemp, tab])
 
   useEffect(() => {
     panelRef.current?.scrollTo({ top: 0 })

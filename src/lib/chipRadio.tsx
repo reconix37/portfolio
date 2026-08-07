@@ -270,10 +270,9 @@ export function ChipRadioProvider({ children }: { children: ReactNode }): ReactE
   useEffect(() => {
     const audio = bindSrc(track)
     setElapsed(0)
+    // не сбрасываем duration в 0 — иначе таймер прыгает пока грузится metadata
     if (Number.isFinite(audio.duration) && audio.duration > 0) {
       setDuration(audio.duration)
-    } else {
-      setDuration(0)
     }
   }, [track.id, bindSrc])
 
