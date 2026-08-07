@@ -1,19 +1,52 @@
-import type { ReactElement } from "react"
+import { useEffect, useState, type ReactElement } from "react"
 import { useChipRadio } from "@/lib/chipRadio"
 import { cn } from "@/lib/utils"
 
 /** Компактный MOCP-виджет — всегда на экране (как у deploychan). */
 export function MiniRadio(): ReactElement {
   const { track, playing, volume, eq, setVolume, togglePlay, nextTrack } = useChipRadio()
+  const [progress, setProgress] = useState(0)
+
+  // псевдо-прогресс лупа (как progress bar у MOCP на референсе)
+  useEffect(() => {
+    if (!playing) return
+    const id = window.setInterval(() => {
+      setProgress((p) => (p >= 100 ? 0 : p + 1.2))
+    }, 200)
+    return () => window.clearInterval(id)
+  }, [playing, track.id])
+
+  useEffect(() => {
+    setProgress(0)
+  }, [track.id])
 
   return (
-    <div className="fixed bottom-16 left-3 z-40 hidden w-[240px] border-2 border-line bg-surface p-2.5 shadow-[4px_4px_0_var(--line)] md:block">
+    <div className="fixed bottom-16 left-3 z-40 hidden w-[250px] border-2 border-line bg-surface p-2.5 shadow-[4px_4px_0_var(--line)] md:block">
       <div className="mb-1.5 flex items-center justify-between font-mono text-[9px] tracking-[0.14em] text-muted uppercase">
         <span>{"// MOCP"}</span>
         <span className={playing ? "text-ok" : ""}>{playing ? "ON AIR" : "IDLE"}</span>
       </div>
 
-      <div className="mb-2 flex h-6 items-end gap-0.5" aria-hidden="true">
+      <div className="mb-1.5 truncate font-mono text-[10px] tracking-[0.06em] text-ink uppercase">
+        <span className="text-muted">~/music/</span>
+        <span className="text-accent">{track.name}</span>
+      </div>
+
+      <div
+        className="mb-2 h-1.5 w-full border border-line bg-bg"
+        role="progressbar"
+        aria-valuenow={Math.round(progress)}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-label="Track progress"
+      >
+        <div
+          className={cn("h-full bg-accent transition-[width] duration-200", !playing && "opacity-40")}
+          style={{ width: `${playing ? progress : 0}%` }}
+        />
+      </div>
+
+      <div className="mb-2 flex h-5 items-end gap-0.5" aria-hidden="true">
         {eq.slice(0, 5).map((h, i) => (
           <div
             key={i}
@@ -24,11 +57,6 @@ export function MiniRadio(): ReactElement {
             style={{ height: `${Math.max(15, h * 100)}%` }}
           />
         ))}
-      </div>
-
-      <div className="mb-2 truncate font-mono text-[10px] tracking-[0.06em] text-ink uppercase">
-        <span className="text-muted">~/music/</span>
-        <span className="text-accent">{track.name}</span>
       </div>
 
       <div className="flex items-center gap-1">

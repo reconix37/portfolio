@@ -28,13 +28,14 @@ export function Sysbar(): ReactElement {
       className="sticky top-0 z-50 border-b-2 border-line bg-surface"
       aria-label="System bar"
     >
-      <div className="mx-auto flex max-w-[1080px] items-center justify-between px-6 py-2.5 text-xs tracking-[0.1em] uppercase">
-        <div className="font-bold text-ink">
-          <span className="text-accent">DANIIL</span> OS{" "}
-          <span className="text-ink-soft">v1.0</span>
+      <div className="mx-auto flex max-w-[1080px] items-center justify-between gap-4 px-6 py-2.5 text-xs tracking-[0.1em] uppercase">
+        <div className="shrink-0 font-bold text-ink">
+          <span className="text-accent">DANIIL</span>
+          <span className="text-ink">.OS</span>
+          <span className="ml-1.5 text-ink-soft">v1.0</span>
         </div>
-        <div className="flex items-center gap-4">
-          <time className="text-ink-soft tabular-nums" dateTime={clock} aria-live="polite">
+        <div className="flex items-center gap-3 sm:gap-4">
+          <time className="hidden text-ink-soft tabular-nums sm:inline" dateTime={clock} aria-live="polite">
             {clock}
           </time>
           <button
