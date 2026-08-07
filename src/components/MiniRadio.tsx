@@ -9,7 +9,7 @@ export function MiniRadio(): ReactElement {
   return (
     <div className="fixed bottom-16 left-3 z-40 hidden w-[240px] border-2 border-line bg-surface p-2.5 shadow-[4px_4px_0_var(--line)] md:block">
       <div className="mb-1.5 flex items-center justify-between font-mono text-[9px] tracking-[0.14em] text-muted uppercase">
-        <span>{"// ncmpcpp"}</span>
+        <span>{"// MOCP"}</span>
         <span className={playing ? "text-ok" : ""}>{playing ? "ON AIR" : "IDLE"}</span>
       </div>
 
