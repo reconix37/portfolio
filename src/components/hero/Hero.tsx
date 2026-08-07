@@ -59,9 +59,20 @@ export const Hero = forwardRef<HTMLElement, HeroProps>(function Hero(
           </div>
         </div>
 
-        {/* absolute — якорь у имени, не сжимает лэйаут */}
-        <div className="pointer-events-none mt-8 flex justify-center md:absolute md:top-6 md:-right-2 md:mt-0 md:block lg:right-0">
-          <Mascot mood={mood} size={MASCOT_SIZE_HERO} />
+        {/* absolute — якорь у имени; стикеры вокруг (маскот не трогаем) */}
+        <div className="pointer-events-none relative mt-8 flex justify-center md:absolute md:top-6 md:-right-2 md:mt-0 md:block lg:right-0">
+          <div className="relative">
+            <Mascot mood={mood} size={MASCOT_SIZE_HERO} />
+            <span className="absolute top-4 -left-3 hidden rotate-[-8deg] border-2 border-line bg-bg px-2 py-1 font-mono text-[10px] tracking-[0.12em] text-ink uppercase shadow-[3px_3px_0_var(--line)] sm:inline-block md:-left-8">
+              HABITFORGE
+            </span>
+            <span className="absolute top-1/3 -right-2 hidden rotate-[7deg] border-2 border-line bg-surface px-2 py-1 font-mono text-[10px] tracking-[0.12em] text-ink uppercase shadow-[3px_3px_0_var(--line)] sm:inline-block md:-right-6">
+              RAG
+            </span>
+            <span className="absolute bottom-10 left-0 hidden rotate-[-4deg] border-2 border-line bg-bg px-2 py-1 font-mono text-[10px] tracking-[0.12em] text-accent uppercase shadow-[3px_3px_0_var(--line)] sm:inline-block md:-left-4">
+              EVALS
+            </span>
+          </div>
         </div>
 
         <div className="relative z-10 mt-10 md:mt-14">
