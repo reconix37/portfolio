@@ -158,19 +158,19 @@ footer (sysbar)      — v1.0 · PREŠOV · время · OPEN TO WORK
 - Подзаголовок: `I build things that work when it matters. Then I write about it like it was easy.` (живо, самоирония, БЕЗ упоминания стека)
 - Строка под терминалом: `>> 4 products in production · 0 slideware` (факт, без юмора — это серьёзная строка)
 
-**FAKE NEWS тикер** — абсурдные заголовки про AI-индустрию и жизнь (англ), НЕ про проекты Дани. Взять за основу эти (можно варьировать, сохраняя тон):
+**FAKE NEWS тикер** — абсурдные заголовки про IT-индустрию и жизнь (англ), НЕ про проекты Дани. ВАЖНО: это рабочее портфолио — никакого NSFW/пошлости/хентая в заголовках (у KISA есть, нам нельзя — сайт смотрят работодатели). Абсурд должен быть смешным, но безопасным. Взять за основу эти (можно варьировать, сохраняя тон):
 - `Scientists baffled: new primate species discovered — vibe coders from Prešov`
-- `Demand for AI hentai games up 665%, analysts speechless`
-- `British scientists: newsletter subscribers now 26% happier in life`
 - `OpenAI buys Dota 2, community asks why`
 - `New Gemini model finally learns basic arithmetic`
-- `Tax office in shock: unemployed pay $300/month on AI subscriptions`
-- `Fed announces plans to cut cryptoans, market confused`
 - `Morrowind gets DLC in August 2026, fans cry tears of joy`
 - `YouTube comments officially declared the least toxic place on the internet`
-- `Statistics show: writing fake news uses 90% of brain resources`
+- `Fed announces plans to cut cryptoans, market confused`
 - `Vibe coders outnumber real coders, nobody notices the difference`
-- `AI agent in a Chinese robot body applies for night shift at the club`
+- `Statistics show: writing fake news uses 90% of brain resources`
+- `Developer found sleeping under desk, code review passed anyway`
+- `Coffee officially declared a required dependency for production`
+- `LGTM approved 47 PRs in one minute, quality unchanged`
+- `GitHub outage blamed on too many merge requests`
 
 **QUOTE.TXT** (цитата в hero): `«I write code not because I have to, but because it's fun. Texts — for the same reason.»` (это перевод вайба KISA-цитаты «Пишу код не потому что надо, а потому что кайфово»)
 
