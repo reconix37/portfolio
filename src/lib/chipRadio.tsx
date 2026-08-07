@@ -11,26 +11,41 @@ import {
 } from "react"
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion"
 
-export type TrackId = "night-shift" | "deploy" | "coffee-loop" | "push-to-prod"
+export type TrackId =
+  | "night-shift"
+  | "deploy"
+  | "coffee-loop"
+  | "push-to-prod"
+  | "rainy-commit"
+  | "soft-reboot"
+  | "late-pr"
 
 export type Track = {
   id: TrackId
   name: string
   bpm: number
+  vibe: "chip" | "lofi"
 }
 
 export const TRACKS: Track[] = [
-  { id: "night-shift", name: "night-shift", bpm: 112 },
-  { id: "deploy", name: "deploy", bpm: 118 },
-  { id: "coffee-loop", name: "coffee-loop", bpm: 110 },
-  { id: "push-to-prod", name: "push-to-prod", bpm: 120 },
+  { id: "night-shift", name: "night-shift", bpm: 112, vibe: "chip" },
+  { id: "deploy", name: "deploy", bpm: 118, vibe: "chip" },
+  { id: "coffee-loop", name: "coffee-loop", bpm: 110, vibe: "chip" },
+  { id: "push-to-prod", name: "push-to-prod", bpm: 120, vibe: "chip" },
+  { id: "rainy-commit", name: "rainy-commit", bpm: 88, vibe: "lofi" },
+  { id: "soft-reboot", name: "soft-reboot", bpm: 92, vibe: "lofi" },
+  { id: "late-pr", name: "late-pr", bpm: 96, vibe: "lofi" },
 ]
 
+/** Паттерны: -1 = rest. Lofi — реже ноты, ниже регистр. */
 const MELODIES: Record<TrackId, number[]> = {
   "night-shift": [48, 55, 60, 55, 48, 52, 55, 60, 48, 55, 63, 55, 48, 52, 60, 55],
   deploy: [36, 36, 43, 36, 48, 43, 36, 43, 36, 36, 48, 43, 55, 48, 43, 36],
   "coffee-loop": [52, 55, 59, 55, 52, 48, 55, 59, 52, 55, 60, 55, 48, 52, 55, 59],
   "push-to-prod": [60, 60, -1, 67, 60, -1, 67, 72, 60, 60, -1, 67, 55, 60, 67, 72],
+  "rainy-commit": [48, -1, 52, -1, 55, -1, 52, -1, 48, -1, 50, -1, 52, -1, 55, -1],
+  "soft-reboot": [43, -1, -1, 48, -1, -1, 50, -1, 43, -1, 48, -1, 55, -1, 52, -1],
+  "late-pr": [55, -1, 52, 48, -1, 52, -1, 55, 60, -1, 55, -1, 52, -1, 48, -1],
 }
 
 function midiToFreq(midi: number): number {
@@ -57,7 +72,7 @@ export function ChipRadioProvider({ children }: { children: ReactNode }): ReactE
   const reduced = usePrefersReducedMotion()
   const [trackIdx, setTrackIdx] = useState(0)
   const [playing, setPlaying] = useState(false)
-  const [volume, setVolume] = useState(0.35)
+  const [volume, setVolume] = useState(0.32)
   const [eq, setEq] = useState([0.3, 0.5, 0.4, 0.6, 0.35])
 
   const ctxRef = useRef<AudioContext | null>(null)
@@ -98,25 +113,28 @@ export function ChipRadioProvider({ children }: { children: ReactNode }): ReactE
     return ctxRef.current
   }, [])
 
-  const beep = useCallback((freq: number, dur: number, type: OscillatorType): void => {
-    const ctx = ctxRef.current
-    const master = masterRef.current
-    if (!ctx || !master) return
-    const now = ctx.currentTime
-    const osc = ctx.createOscillator()
-    const gain = ctx.createGain()
-    osc.type = type
-    osc.frequency.value = freq
-    gain.gain.setValueAtTime(0.0001, now)
-    gain.gain.exponentialRampToValueAtTime(0.18, now + 0.01)
-    gain.gain.exponentialRampToValueAtTime(0.0001, now + dur)
-    osc.connect(gain)
-    gain.connect(master)
-    osc.start(now)
-    osc.stop(now + dur + 0.02)
-  }, [])
+  const beep = useCallback(
+    (freq: number, dur: number, type: OscillatorType, peak = 0.18): void => {
+      const ctx = ctxRef.current
+      const master = masterRef.current
+      if (!ctx || !master) return
+      const now = ctx.currentTime
+      const osc = ctx.createOscillator()
+      const gain = ctx.createGain()
+      osc.type = type
+      osc.frequency.value = freq
+      gain.gain.setValueAtTime(0.0001, now)
+      gain.gain.exponentialRampToValueAtTime(peak, now + 0.02)
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + dur)
+      osc.connect(gain)
+      gain.connect(master)
+      osc.start(now)
+      osc.stop(now + dur + 0.02)
+    },
+    [],
+  )
 
-  const noiseHit = useCallback((dur: number): void => {
+  const noiseHit = useCallback((dur: number, amp = 0.08): void => {
     const ctx = ctxRef.current
     const master = masterRef.current
     if (!ctx || !master) return
@@ -127,7 +145,7 @@ export function ChipRadioProvider({ children }: { children: ReactNode }): ReactE
     const src = ctx.createBufferSource()
     const gain = ctx.createGain()
     src.buffer = buf
-    gain.gain.value = 0.08
+    gain.gain.value = amp
     src.connect(gain)
     gain.connect(master)
     src.start()
@@ -139,13 +157,19 @@ export function ChipRadioProvider({ children }: { children: ReactNode }): ReactE
     const step = stepRef.current % melody.length
     const note = melody[step]
     const sixteenth = 60 / track.bpm / 4
+    const lofi = track.vibe === "lofi"
 
     if (note >= 0) {
-      const wave: OscillatorType = track.id === "deploy" ? "square" : "triangle"
-      beep(midiToFreq(note), sixteenth * 0.85, wave)
+      const wave: OscillatorType = lofi
+        ? "triangle"
+        : track.id === "deploy"
+          ? "square"
+          : "triangle"
+      beep(midiToFreq(note), sixteenth * (lofi ? 1.4 : 0.85), wave, lofi ? 0.1 : 0.18)
     }
-    if (step % 4 === 0) noiseHit(0.04)
-    if (step % 8 === 4) beep(midiToFreq(36), sixteenth * 0.5, "square")
+    if (!lofi && step % 4 === 0) noiseHit(0.04)
+    if (lofi && step % 8 === 0) noiseHit(0.06, 0.035)
+    if (!lofi && step % 8 === 4) beep(midiToFreq(36), sixteenth * 0.5, "square", 0.12)
 
     stepRef.current = step + 1
 

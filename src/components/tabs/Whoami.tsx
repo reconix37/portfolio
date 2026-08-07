@@ -3,6 +3,8 @@ import { Mascot, type Mood } from "@/components/hero/Mascot"
 import { Terminal } from "@/components/hero/Terminal"
 import { Band } from "@/components/Band"
 import { SectionLabel } from "@/components/SectionLabel"
+import { HandCallout } from "@/components/HandCallout"
+import { RadioDock } from "@/components/RadioDock"
 import { cn } from "@/lib/utils"
 
 const STATS = [
@@ -27,7 +29,6 @@ export const Whoami = forwardRef<HTMLElement, WhoamiProps>(function Whoami(
       <SectionLabel text="01 — WHOAMI" />
       <div className="wrap py-6 md:py-8">
         <div className="mb-8 flex flex-col gap-8 lg:mb-10 lg:flex-row lg:items-start lg:justify-between lg:gap-10">
-          {/* левая колонка — как hero у KISA */}
           <div className="min-w-0 flex-1 lg:max-w-[560px]">
             <p className="mb-4 font-mono text-[13px] tracking-[0.14em] text-muted uppercase">
               {"// system online — ai/ml engineer · presov"}
@@ -53,15 +54,12 @@ export const Whoami = forwardRef<HTMLElement, WhoamiProps>(function Whoami(
               that catch regressions before users do.
             </p>
 
-            <p className="font-mono text-xs tracking-[0.06em] text-muted">
+            <p className="mb-3 font-mono text-xs tracking-[0.06em] text-muted">
               {">> 4 products shipped · 0 slideware"}
             </p>
-            <p className="handwrite mt-2 text-accent" aria-hidden="true">
-              ↗ type help in the terminal below
-            </p>
+            <HandCallout rotate={-3}>type help in the terminal below</HandCallout>
           </div>
 
-          {/* полароид — якорь справа */}
           <div className="relative mx-auto w-fit shrink-0 lg:mx-0 lg:mt-1">
             <div className="rotate-[4deg] border-2 border-line bg-bg p-3 pb-9 shadow-[6px_6px_0_var(--line)] transition-transform hover:rotate-[2deg]">
               <div className="relative border-2 border-line bg-accent-2">
@@ -76,12 +74,12 @@ export const Whoami = forwardRef<HTMLElement, WhoamiProps>(function Whoami(
                 </span>
               </div>
             </div>
-            <p
-              className="handwrite absolute -right-1 -bottom-2 rotate-[8deg] text-[13px] text-accent md:-right-10"
-              aria-hidden="true"
+            <HandCallout
+              rotate={8}
+              className="absolute -right-2 -bottom-3 md:-right-14"
             >
-              ↗ site mascot
-            </p>
+              site mascot
+            </HandCallout>
             <span className="absolute top-8 -left-5 hidden rotate-[-12deg] border-2 border-line bg-bg px-2 py-1 font-mono text-[10px] tracking-[0.12em] text-ink uppercase shadow-[3px_3px_0_var(--line)] sm:inline-block">
               HABITFORGE
             </span>
@@ -94,7 +92,6 @@ export const Whoami = forwardRef<HTMLElement, WhoamiProps>(function Whoami(
           </div>
         </div>
 
-        {/* stats сразу под hero — как у deploychan, в первом экране */}
         <div className="mb-8 grid grid-cols-2 border-y-2 border-line md:grid-cols-4">
           {STATS.map((s, i) => (
             <div
@@ -114,7 +111,14 @@ export const Whoami = forwardRef<HTMLElement, WhoamiProps>(function Whoami(
           ))}
         </div>
 
-        {/* терминал — под stats */}
+        {/* радио в потоке — как MOCP у KISA, не floating */}
+        <div className="mb-8">
+          <HandCallout rotate={-2} className="mb-3">
+            chipradio · close anytime
+          </HandCallout>
+          <RadioDock />
+        </div>
+
         <div className="mb-2">
           <Terminal />
         </div>

@@ -5,25 +5,20 @@ import { AppFrame } from "@/components/AppFrame"
 import { TabBar, type TabId } from "@/components/TabBar"
 import { FakeNews } from "@/components/FakeNews"
 import { BootModal } from "@/components/BootModal"
-import { MiniRadio } from "@/components/MiniRadio"
 import { Whoami } from "@/components/tabs/Whoami"
 import { Projects } from "@/components/tabs/Projects"
 import { Stack } from "@/components/tabs/Stack"
 import { Education } from "@/components/tabs/Education"
 import { Contact } from "@/components/tabs/Contact"
-import { Radio } from "@/components/tabs/Radio"
 import { FloatingMascot, type Mood } from "@/components/hero/Mascot"
 import { ChipRadioProvider } from "@/lib/chipRadio"
 
 export default function App(): ReactElement {
   const [tab, setTab] = useState<TabId>("whoami")
   const [mood, setMood] = useState<Mood>("idle")
-  const [booted, setBooted] = useState(false)
   const whoamiRef = useRef<HTMLElement>(null)
   const panelRef = useRef<HTMLDivElement>(null)
   const moodTimer = useRef<number | null>(null)
-
-  const onBootDone = useCallback((): void => setBooted(true), [])
 
   const setMoodTemp = useCallback((next: Mood, ms = 600): void => {
     setMood(next)
@@ -89,18 +84,16 @@ export default function App(): ReactElement {
                 {tab === "stack" && <Stack />}
                 {tab === "education" && <Education />}
                 {tab === "contact" && <Contact />}
-                {tab === "radio" && <Radio />}
               </div>
             </div>
           </AppFrame>
         </main>
 
-        {booted && <MiniRadio />}
         {tab !== "whoami" && (
           <FloatingMascot mood={mood} hideWhenVisibleRef={whoamiRef} forceShow />
         )}
         <Footer />
-        <BootModal onDone={onBootDone} />
+        <BootModal onDone={() => undefined} />
       </div>
     </ChipRadioProvider>
   )

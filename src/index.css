@@ -268,13 +268,14 @@
   .reveal-d2 { transition-delay: 0.14s; }
   .reveal-d3 { transition-delay: 0.21s; }
 
-  /* handwritten callout — Space Mono + наклон, без нового шрифта */
+  /* handwritten callout — крупнее, заметнее, как у KISA */
   .handwrite {
     font-family: var(--font-mono);
-    font-size: 12px;
+    font-size: clamp(15px, 1.6vw, 18px);
     font-style: italic;
-    letter-spacing: 0.02em;
-    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    line-height: 1.25;
   }
 }
 

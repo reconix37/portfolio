@@ -1,13 +1,7 @@
 import type { ReactElement } from "react"
 import { cn } from "@/lib/utils"
 
-export type TabId =
-  | "whoami"
-  | "projects"
-  | "stack"
-  | "education"
-  | "contact"
-  | "radio"
+export type TabId = "whoami" | "projects" | "stack" | "education" | "contact"
 
 export const TABS: { id: TabId; label: string }[] = [
   { id: "whoami", label: "01 — WHOAMI" },
@@ -15,7 +9,6 @@ export const TABS: { id: TabId; label: string }[] = [
   { id: "stack", label: "03 — STACK" },
   { id: "education", label: "04 — EDUCATION" },
   { id: "contact", label: "05 — CONTACT" },
-  { id: "radio", label: "06 — RADIO" },
 ]
 
 interface TabBarProps {

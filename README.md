@@ -1,6 +1,6 @@
 # DANIIL OS — personal site
 
-Персональный сайт Даниила Верховского — AI/ML engineer. Сайт = приложение-окно: вкладки (WHOAMI / PROJECTS / STACK / EDUCATION / CONTACT / RADIO), маскот-агент, терминал, WebAudio chipradio.
+Персональный сайт Даниила Верховского — AI/ML engineer. Сайт = приложение-окно: вкладки (WHOAMI / PROJECTS / STACK / EDUCATION / CONTACT), маскот-агент, терминал, WebAudio chipradio (в потоке WHOAMI, закрываемый).
 
 Вайб: нео-брутализм / old-web (референс [KISA](https://mcp.deploychan.webcam/), Poolsuite). Никакого AI-слопа.
 
@@ -9,7 +9,7 @@
 - Vite + React 19 + TypeScript
 - Tailwind CSS v4 + shadcn/ui
 - Syne + Space Mono
-- WebAudio API (чиптюн-радио, без внешних треков)
+- WebAudio API (чиптюн + lo-fi лупы, без внешних треков)
 
 ## Dev
 
@@ -22,7 +22,8 @@ npm run dev
 
 ```
 sysbar → AppFrame (titlebar + tabs + panel) → footer
-tabs/: Whoami · Projects · Stack · Education · Contact · Radio
+tabs/: Whoami · Projects · Stack · Education · Contact
+Whoami: polaroid mascot · stats · RadioDock (closable) · terminal
 ```
 
 Страница не скроллится — скролл только внутри активной панели.

@@ -1,6 +1,7 @@
 import { useMemo, useState, type ReactElement } from "react"
 import { SectionLabel } from "@/components/SectionLabel"
 import { SectionBadge } from "@/components/SectionBadge"
+import { HandCallout } from "@/components/HandCallout"
 import { cn } from "@/lib/utils"
 import type { Mood } from "@/components/hero/Mascot"
 
@@ -99,9 +100,9 @@ export function Projects({ onMood }: ProjectsProps): ReactElement {
         <p className="mb-2 font-mono text-sm text-muted">
           {"// real products, real numbers — filter and sort"}
         </p>
-        <p className="handwrite mb-6 text-accent" aria-hidden="true">
-          ↗ hover a row — mascot reacts
-        </p>
+        <HandCallout rotate={-2} className="mb-6">
+          hover a row — mascot reacts
+        </HandCallout>
 
         <div className="mb-5 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex flex-wrap items-center gap-1.5">
