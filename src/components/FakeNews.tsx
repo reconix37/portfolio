@@ -33,7 +33,7 @@ function TickerSet(): ReactElement {
   )
 }
 
-/** FAKE NEWS-style ticker (как у deploychan) — поверх sysbar. */
+/** FAKE NEWS-style ticker (как у deploychan) — сверху окна. */
 export function FakeNews(): ReactElement {
   const trackRef = useRef<HTMLDivElement>(null)
   const setRef = useRef<HTMLDivElement>(null)

@@ -1,6 +1,7 @@
-import type { ReactElement } from "react"
+import { useEffect, useState, type ReactElement } from "react"
 import { SectionLabel } from "@/components/SectionLabel"
 import { SectionBadge } from "@/components/SectionBadge"
+import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion"
 import { cn } from "@/lib/utils"
 
 type ModuleRow = {
@@ -40,7 +41,37 @@ const MODULES: ModuleRow[] = [
   },
 ]
 
+const ROW_DELAY_MS = 150
+
+/** Первый boot за сессию — повторный заход на вкладку без реплея. */
+let stackBootDone = false
+
 export function Stack(): ReactElement {
+  const reduced = usePrefersReducedMotion()
+  const [visible, setVisible] = useState(() =>
+    reduced || stackBootDone ? MODULES.length : 0,
+  )
+
+  useEffect(() => {
+    if (reduced || stackBootDone) {
+      setVisible(MODULES.length)
+      stackBootDone = true
+      return
+    }
+
+    let count = 0
+    const id = window.setInterval(() => {
+      count += 1
+      setVisible(count)
+      if (count >= MODULES.length) {
+        window.clearInterval(id)
+        stackBootDone = true
+      }
+    }, ROW_DELAY_MS)
+
+    return () => window.clearInterval(id)
+  }, [reduced])
+
   return (
     <section className="relative" aria-labelledby="stack-heading">
       <SectionLabel text="03 — STACK" />
@@ -69,29 +100,57 @@ export function Stack(): ReactElement {
               </tr>
             </thead>
             <tbody>
-              {MODULES.map((row, i) => (
-                <tr
-                  key={row.module}
-                  className={cn(
-                    "border-b-2 border-line last:border-b-0",
-                    i % 2 === 1 ? "bg-surface" : "bg-transparent",
-                  )}
-                >
-                  <td className="px-4 py-3.5 font-display text-base font-extrabold">
-                    {row.module}
-                  </td>
-                  <td className="px-4 py-3.5 font-mono text-xs tracking-[0.08em] text-accent uppercase">
-                    {row.status}
-                  </td>
-                  <td className="px-4 py-3.5 font-mono text-xs text-ink-soft">
-                    {row.exports}
-                  </td>
-                </tr>
-              ))}
+              {MODULES.map((row, i) =>
+                i < visible ? (
+                  <BootRow key={row.module} row={row} index={i} animate={!reduced} />
+                ) : null,
+              )}
             </tbody>
           </table>
         </div>
       </div>
     </section>
+  )
+}
+
+function BootRow({
+  row,
+  index,
+  animate,
+}: {
+  row: ModuleRow
+  index: number
+  animate: boolean
+}): ReactElement {
+  const [on, setOn] = useState(!animate)
+
+  useEffect(() => {
+    if (!animate) {
+      setOn(true)
+      return
+    }
+    const id = window.requestAnimationFrame(() => setOn(true))
+    return () => window.cancelAnimationFrame(id)
+  }, [animate])
+
+  return (
+    <tr
+      className={cn(
+        "border-b-2 border-line last:border-b-0 transition-[opacity,transform] duration-300 ease-out",
+        index % 2 === 1 ? "bg-surface" : "bg-transparent",
+        on ? "translate-y-0 opacity-100" : "translate-y-1.5 opacity-0",
+      )}
+    >
+      <td className="px-4 py-3.5 font-display text-base font-extrabold">
+        {row.module}
+      </td>
+      <td className="px-4 py-3.5 font-mono text-xs tracking-[0.08em] uppercase">
+        <span className="text-ok">[OK]</span>{" "}
+        <span className="text-accent">{row.status}</span>
+      </td>
+      <td className="px-4 py-3.5 font-mono text-xs text-ink-soft">
+        {row.exports}
+      </td>
+    </tr>
   )
 }

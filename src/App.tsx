@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useRef, useState, type ReactElement } from "react"
-import { Sysbar } from "@/components/Sysbar"
 import { Footer } from "@/components/Footer"
 import { AppFrame } from "@/components/AppFrame"
 import { TabBar, type TabId } from "@/components/TabBar"
@@ -108,7 +107,6 @@ export default function App(): ReactElement {
       <div className="relative flex h-dvh flex-col overflow-hidden bg-bg text-ink">
         <div className="pointer-events-none fixed inset-0 z-[90] opacity-50 scanlines" aria-hidden="true" />
         <FakeNews />
-        <Sysbar onOpenChangelog={() => setChangelogOpen(true)} />
 
         <main className="flex min-h-0 flex-1 flex-col px-3 py-3 md:px-6 md:py-4">
           <AppFrame
