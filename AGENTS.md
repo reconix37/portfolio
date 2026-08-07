@@ -182,6 +182,33 @@ footer (sysbar)      — v1.0 · PREŠOV · время · OPEN TO WORK
 
 **Футер**: `STATUS: OPEN TO WORK` → `STATUS: OPEN TO WORK · 24/7 ON THE JOB` (как «24/7 ВЕРЕН СВОЕМУ ДЕЛУ» у KISA); `© 2026 · built by hand` → `© 2026 · made with too much coffee` (НЕ «Claude Code» — Даня не им делал)
 
+**ВСЕ ОСТАЛЬНЫЕ ПАНЕЛИ — тоже переписать (не только WHOAMI/тикер). OS-вайб сохранить, но добавить доброты/самоиронии в подзаголовки и описания:**
+
+**PROJECTS (панель 02):**
+- Заголовок: `SHIPPED MODULES` + бейдж `// 4 items` — ОСТАВИТЬ (OS-метафора уже ок)
+- Подзаголовок: `// real products, real numbers — filter and sort` → `// four things that left the laptop and survived` (добро, самоирония)
+- Колонки таблицы: `NAME | STACK | METRICS | STATUS` — оставить
+- Блюрбы проектов (описание в деталях) — переписать живо, НО с реальными цифрами и без воды:
+  - HabitForge: `Habit coach that lives on your phone. 111+ tests keep the bar high, 68 migrations keep the data honest, 12 edge functions do the heavy lifting.` (было: «Habit coach on device. Structured Gemini parses...» — слишком сухо)
+  - AI Chat: `Chat with 44 personas without ever leaving the browser. Tiered access, local models for the free crowd, FastAPI holding it all together.` 
+  - SLE Terminal: `A trading terminal that has seen 5 years of M5 data and didn't blink. 18K+ LOC of Python+TS, XGBoost keeping the gate.`
+  - Thesis: `RAG pipeline with guardrails that actually guard. Loop engineering, because first drafts are for losers. Target 2027 — real work, not slideware.`
+
+**STACK (панель 03):**
+- Заголовок: `LOADED KERNEL` + `// loaded` — оставить
+- Подзаголовок: `// $ lsmod | grep daniil` → `// what's actually installed on this machine` (добрее)
+- Категории (MODULE/STATUS/EXPORTS) — оставить, это таблица фактов
+
+**EDUCATION (панель 04):**
+- Заголовок: `TRAINING HISTORY` + `// in progress` — оставить
+- Подзаголовок: `// $ ps aux | grep training` → `// formal training, still compiling` (самоирония: диплом «компилируется» до 2027)
+- Детали строк (detail) — оставить факты, но смягчить: `Ing. thesis pipeline — not slideware` уже ок (оставить), остальные не трогать
+
+**CONTACT (панель 05):**
+- Заголовок: `ESTABLISH CONNECTION` + `// 24h response` — оставить
+- Подзаголовок: `// $ netstat -an | grep LISTEN — click a row to connect` → `// channels are open — pick one, I actually reply` (добро)
+- Строка preferred: `>> OPEN TELEGRAM "..." — preferred` — оставить
+
 ### Шаг 9. РЕАЛЬНЫЕ ТРЕКИ вместо синтеза (Даня: «то, что там — пиздец»)
 
 Сейчас радио играет WebAudio-синтез (chipRadio.tsx — осцилляторы и мелодии-паттерны). Это звучит убого. В `public/music/` уже лежат 7 РЕАЛЬНЫХ mp3 (Jamendo, CC-лицензия — легально, бесплатно):
