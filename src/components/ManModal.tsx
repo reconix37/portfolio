@@ -8,7 +8,7 @@ interface ManModalProps {
 const SECTIONS: { h: string; body: string }[] = [
   {
     h: "NAME",
-    body: "daniil-os — personal portfolio as a desktop app",
+    body: "daniil-os — a portfolio pretending to be an OS. Everything here is real, except the window buttons.",
   },
   {
     h: "TABS",
@@ -20,7 +20,7 @@ const SECTIONS: { h: string; body: string }[] = [
   },
   {
     h: "RADIO",
-    body: "CHIPRADIO under WHOAMI stats — closable. Chip + lo-fi loops via WebAudio (no files).",
+    body: "lofi radio under WHOAMI — real tracks now (was: chiptune synth, god rest its soul).",
   },
   {
     h: "HOTKEYS",
@@ -28,7 +28,7 @@ const SECTIONS: { h: string; body: string }[] = [
   },
   {
     h: "MASCOT",
-    body: "Follows cursor. Click = jump. Scroll panel = mood burst. Hover PROJECTS rows = react.",
+    body: "follows cursor, blinks, judges your code. Click her — she's been waiting.",
   },
 ]
 

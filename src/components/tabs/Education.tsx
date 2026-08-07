@@ -48,7 +48,7 @@ export function Education(): ReactElement {
           <SectionBadge text="// in progress" />
         </h2>
         <p className="mb-5 font-mono text-sm text-muted">
-          {"// $ ps aux | grep training"}
+          {"// formal training, still compiling"}
         </p>
 
         <div className="mb-6 overflow-x-auto border-2 border-line">

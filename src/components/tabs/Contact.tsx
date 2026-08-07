@@ -50,8 +50,8 @@ const PORTS: PortRow[] = [
 
 const HANDSHAKE = [
   "Skip the soft pitch. What broke, what you tried, what you need.",
-  "Metrics > decks. If it’s slideware, I’ll smell it.",
-  "Reply in ~24h. If I ghost — ping again, I’m not offended.",
+  "Show me something that shipped. Slideware gets a polite smile.",
+  "Reply in ~24h. If I ghost — ping again, I'm not offended.",
 ]
 
 function openPort(row: PortRow): void {
@@ -91,7 +91,7 @@ export function Contact(): ReactElement {
           <SectionBadge text="// 24h response" />
         </h2>
         <p className="mb-5 font-mono text-sm text-muted">
-          {"// $ netstat -an | grep LISTEN — click a row to connect"}
+          {"// channels are open — pick one, I actually reply"}
         </p>
 
         {preferred && (

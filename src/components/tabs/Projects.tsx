@@ -33,7 +33,7 @@ const PROJECTS: ProjectRow[] = [
     year: 2025,
     order: 1,
     blurb:
-      "Habit coach on device. Structured Gemini parses, RLS across 68 migrations, 12 edge functions. 95%+ parse success — evals catch regressions before users.",
+      "A habit coach that lives on your phone and nags nicely. 111+ tests, 68 migrations, 12 edge functions — the bar stays high.",
   },
   {
     name: "AI Chat Platform",
@@ -45,7 +45,7 @@ const PROJECTS: ProjectRow[] = [
     year: 2024,
     order: 2,
     blurb:
-      "Multi-persona chat with tiered access. 44 personas, 3 billing tiers, 2 free local models. FastAPI + Postgres + Redis under the hood.",
+      "44 personas, 3 tiers, 2 local models that cost nothing to run. Pick a character, it'll talk back.",
   },
   {
     name: "SLE Terminal",
@@ -57,7 +57,7 @@ const PROJECTS: ProjectRow[] = [
     year: 2023,
     order: 3,
     blurb:
-      "Trading terminal: 18K+ LOC, 11 REST routers, 5+ years of M5 data feeding models. XGBoost gatekeeper, Next.js front.",
+      "A trading terminal that watched 5 years of M5 data and never blinked. 18K+ LOC of patience.",
   },
   {
     name: "MSc Thesis — RAG",
@@ -69,7 +69,7 @@ const PROJECTS: ProjectRow[] = [
     year: 2027,
     order: 4,
     blurb:
-      "Ing. thesis at FVT TUKE: RAG pipeline with guardrails and a loop engine. Target 2027. In progress — not slideware.",
+      "RAG pipeline with guardrails that actually guard. Loop engineering because first drafts are for losers. 2027 — real work, not slideware.",
   },
 ]
 
@@ -109,7 +109,7 @@ export function Projects({ onMood }: ProjectsProps): ReactElement {
           <SectionBadge text="// 4 items" />
         </h2>
         <p className="mb-5 font-mono text-sm text-muted">
-          {"// real products, real numbers — filter and sort"}
+          {"// four things that left the laptop and survived"}
         </p>
 
         <div className="mb-5 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">

@@ -7,15 +7,15 @@ const ENTRIES = [
     items: [
       "Tabbed DANIIL OS shell (no scroll-landing)",
       "WHOAMI polaroid · stats · terminal · chipradio",
-      "PROJECTS catalog table with TYPE/SORT",
-      "FAKE NEWS ticker · boot modal · mascot moods",
+      "PROJECTS catalog — filter, sort, poke at numbers",
+      "FAKE NEWS ticker (nothing here is true, obviously) · boot modal · mascot moods",
     ],
   },
   {
     ver: "v1.1",
     date: "2026-08",
     items: [
-      "RadioDock in WHOAMI flow (closable + lo-fi)",
+      "RadioDock — real lofi now, your ears can rest",
       "Hand callouts · quote block · CTAs",
       "Changelog · filesystem map · man page",
       "Project detail drawer · UI sfx",

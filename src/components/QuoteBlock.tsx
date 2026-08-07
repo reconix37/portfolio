@@ -9,9 +9,13 @@ export function QuoteBlock(): ReactElement {
       </p>
       <p className="mb-4 text-[clamp(16px,2.2vw,20px)] leading-snug tracking-[0.02em]">
         <span className="mr-1 font-display text-3xl leading-none text-accent" aria-hidden="true">
-          "
+          «
         </span>
-        Ship evals before vibes. Structured output or it doesn&apos;t leave the laptop.
+        I write code not because I have to, but because it&apos;s fun. Texts — for
+        the same reason.
+        <span className="ml-0.5 font-display text-3xl leading-none text-accent" aria-hidden="true">
+          »
+        </span>
       </p>
       <p className="font-mono text-[10px] tracking-[0.14em] text-muted uppercase">
         — motives · short form

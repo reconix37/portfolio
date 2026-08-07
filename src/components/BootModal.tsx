@@ -6,11 +6,11 @@ const BOOT_KEY = "daniil-os-booted"
 const LINES = [
   { t: "$ cd /var/daniil-os", cls: "cmd" as const },
   { t: "$ ./boot.sh", cls: "cmd" as const },
-  { t: "[OK] cream/graphite/terracotta theme loaded", cls: "ok" as const },
+  { t: "[OK] cream/graphite/terracotta theme loaded (as nature intended)", cls: "ok" as const },
   { t: "[OK] tabs mounted · whoami/projects/stack/…", cls: "ok" as const },
-  { t: "[OK] chipradio daemon spawned", cls: "ok" as const },
+  { t: "[OK] radio daemon spawned — real tracks, no oscillators harmed", cls: "ok" as const },
   { t: "[OK] mascot sprites warmed up", cls: "ok" as const },
-  { t: "[ READY ] daniil os v1.0 online_", cls: "ready" as const },
+  { t: "[ READY ] daniil os v1.0 online — coffee in hand_", cls: "ready" as const },
 ]
 
 interface BootModalProps {

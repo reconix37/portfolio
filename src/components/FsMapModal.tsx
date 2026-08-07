@@ -4,10 +4,10 @@ import { cn } from "@/lib/utils"
 
 const TREE: { path: string; id: TabId; hint: string }[] = [
   { path: "/whoami", id: "whoami", hint: "hero · polaroid · radio · terminal" },
-  { path: "/projects", id: "projects", hint: "shipped modules catalog" },
-  { path: "/stack", id: "stack", hint: "lsmod · loaded kernel" },
-  { path: "/education", id: "education", hint: "training history" },
-  { path: "/contact", id: "contact", hint: "establish connection" },
+  { path: "/projects", id: "projects", hint: "shipped modules catalog (4, all real)" },
+  { path: "/stack", id: "stack", hint: "lsmod · loaded kernel (no bloatware)" },
+  { path: "/education", id: "education", hint: "training history (still compiling)" },
+  { path: "/contact", id: "contact", hint: "establish connection (channels open)" },
 ]
 
 interface FsMapModalProps {
@@ -55,7 +55,9 @@ export function FsMapModal({
           <h2 id="fsmap-title" className="mb-1 text-[clamp(22px,3vw,28px)]">
             FILESYSTEM
           </h2>
-          <p className="mb-5 font-mono text-xs text-muted">{"// click a path to cd"}</p>
+          <p className="mb-5 font-mono text-xs text-muted">
+            {"// click a path — it's a map, not a suggestion"}
+          </p>
           <ul className="flex flex-col gap-2 font-mono text-sm">
             {TREE.map((node) => {
               const label = TABS.find((t) => t.id === node.id)?.label ?? node.id

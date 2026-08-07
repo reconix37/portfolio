@@ -1,13 +1,18 @@
 import { useEffect, useRef, type ReactElement } from "react"
 
 const HEADLINES = [
-  "HabitForge evals still at 95%+ structured parse — vibes rejected at CI",
-  "4 products shipped · 0 slideware cleared code review",
-  "SLE Terminal: 5+ years M5 data still feeding the gatekeeper",
-  "DANIIL OS v1.0 online · Prešov timezone locked",
-  "AI Chat: 44 personas · 2 local models · crypto billing not a joke",
-  "Thesis 2027: RAG + guardrails — loop eng in progress",
-  "111+ tests green · 68 migrations · 12 edge functions humming",
+  "Scientists baffled: new primate species discovered — vibe coders from Prešov",
+  "OpenAI buys Dota 2, community asks why",
+  "New Gemini model finally learns basic arithmetic",
+  "Morrowind gets DLC in August 2026, fans cry tears of joy",
+  "YouTube comments officially declared the least toxic place on the internet",
+  "Vibe coders outnumber real coders, nobody notices the difference",
+  "Statistics show: writing fake news uses 90% of brain resources",
+  "Developer found sleeping under desk, code review passed anyway",
+  "Coffee officially declared a required dependency for production",
+  "LGTM approved 47 PRs in one minute, quality unchanged",
+  "GitHub outage blamed on too many merge requests",
+  "Bug survived 5 code reviews, promoted to feature",
 ]
 
 function TickerSet(): ReactElement {

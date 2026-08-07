@@ -28,11 +28,12 @@ export function Footer({ onOpenChangelog }: FooterProps): ReactElement {
           <time className="text-ink tabular-nums" dateTime={clock}>
             {clock}
           </time>{" "}
-          · STATUS: <b className="font-bold text-ok">OPEN TO WORK</b>
+          · STATUS:{" "}
+          <b className="font-bold text-ok">OPEN TO WORK · 24/7 ON THE JOB</b>
         </div>
         <div className="flex gap-[18px]">
           <span>© 2026</span>
-          <span>built by hand</span>
+          <span>made with too much coffee</span>
         </div>
       </div>
     </footer>

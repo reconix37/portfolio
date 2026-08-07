@@ -10,10 +10,10 @@ import type { TabId } from "@/components/TabBar"
 import { cn } from "@/lib/utils"
 
 const STATS = [
-  { value: "4", label: "SHIPPED MODULES" },
-  { value: "111+", label: "TEST SUITES" },
+  { value: "4", label: "PRODUCTS IN PRODUCTION" },
+  { value: "111+", label: "TESTS, ALL GREEN" },
   { value: "44", label: "CHAT PERSONAS" },
-  { value: "18K+", label: "LOC · SLE" },
+  { value: "18K+", label: "LINES OF CODE" },
 ]
 
 interface WhoamiProps {
@@ -39,26 +39,14 @@ export const Whoami = forwardRef<HTMLElement, WhoamiProps>(function Whoami(
 
             <h1
               id="whoami-heading"
-              className="mb-4 text-[clamp(30px,4.8vw,52px)] leading-[1.12]"
+              className="mb-4 text-[clamp(28px,4.4vw,48px)] leading-[1.15] tracking-tight normal-case"
             >
-              I BUILD{" "}
-              <span className="inline-block bg-accent px-1.5 py-0.5 text-bg dark:text-[#121110]">
-                AI PRODUCTS
-              </span>{" "}
-              THAT{" "}
-              <span className="inline-block bg-accent px-1.5 py-0.5 text-bg dark:text-[#121110]">
-                SURVIVE PRODUCTION
-              </span>
+              ai/ml engineer, thesis-in-progress, and an honest… good guy.
             </h1>
 
             <p className="mb-5 max-w-[520px] text-sm tracking-[0.04em] text-ink-soft md:text-[15px]">
-              Generative pipelines.{" "}
-              <b className="font-bold text-accent">Structured LLM output</b>. Evals
-              that catch regressions before users do.
-            </p>
-
-            <p className="mb-5 font-mono text-xs tracking-[0.06em] text-muted">
-              {">> 4 products shipped · 0 slideware"}
+              I build things that work when it matters. Sometimes they even work
+              when it doesn&apos;t.
             </p>
 
             {onNavigate && (
@@ -149,6 +137,9 @@ export const Whoami = forwardRef<HTMLElement, WhoamiProps>(function Whoami(
             type help in the terminal
           </HandCallout>
           <Terminal />
+          <p className="mt-3 font-mono text-xs tracking-[0.06em] text-muted">
+            {">> 4 products in production · 0 slideware"}
+          </p>
         </div>
       </div>
       <Band />

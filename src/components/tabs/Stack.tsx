@@ -50,7 +50,7 @@ export function Stack(): ReactElement {
           <SectionBadge text="// loaded" />
         </h2>
         <p className="mb-5 font-mono text-sm text-muted">
-          {"// $ lsmod | grep daniil"}
+          {"// what's actually installed on this machine"}
         </p>
 
         <div className="overflow-x-auto border-2 border-line">
