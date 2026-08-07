@@ -157,7 +157,7 @@ footer (sysbar)      — v1.0 · PREŠOV · время · OPEN TO WORK
 **WHOAMI (hero):**
 - Кинкер: `// system online — ai/ml engineer · presov` (оставить)
 - Заголовок: `ai/ml engineer, thesis-in-progress, and an honest… good guy.` (строчные, многоточие, самоирония — как «…хороший парень» у KISA, но своё)
-- Подзаголовок: `I build things that work when it matters. Then I write about it like it was easy.` (живо, самоирония, БЕЗ упоминания стека)
+- Подзаголовок: `I build things that work when it matters. Sometimes they even work when it doesn't.` (тепло, самоирония, БЕЗ упоминания стека)
 - Строка под терминалом: `>> 4 products in production · 0 slideware` (факт, без юмора — это серьёзная строка)
 
 **FAKE NEWS тикер** — абсурдные заголовки про IT-индустрию и жизнь (англ), НЕ про проекты Дани. ВАЖНО: это рабочее портфолио — никакого NSFW/пошлости/хентая в заголовках (у KISA есть, нам нельзя — сайт смотрят работодатели). Абсурд должен быть смешным, но безопасным. Взять за основу эти (можно варьировать, сохраняя тон):
@@ -166,13 +166,13 @@ footer (sysbar)      — v1.0 · PREŠOV · время · OPEN TO WORK
 - `New Gemini model finally learns basic arithmetic`
 - `Morrowind gets DLC in August 2026, fans cry tears of joy`
 - `YouTube comments officially declared the least toxic place on the internet`
-- `Fed announces plans to cut cryptoans, market confused`
 - `Vibe coders outnumber real coders, nobody notices the difference`
 - `Statistics show: writing fake news uses 90% of brain resources`
 - `Developer found sleeping under desk, code review passed anyway`
 - `Coffee officially declared a required dependency for production`
 - `LGTM approved 47 PRs in one minute, quality unchanged`
 - `GitHub outage blamed on too many merge requests`
+- `Bug survived 5 code reviews, promoted to feature`
 
 **QUOTE.TXT** (цитата в hero): `«I write code not because I have to, but because it's fun. Texts — for the same reason.»` (это перевод вайба KISA-цитаты «Пишу код не потому что надо, а потому что кайфово»)
 
@@ -190,11 +190,11 @@ footer (sysbar)      — v1.0 · PREŠOV · время · OPEN TO WORK
 - Заголовок: `SHIPPED MODULES` + бейдж `// 4 items` — ОСТАВИТЬ (OS-метафора уже ок)
 - Подзаголовок: `// real products, real numbers — filter and sort` → `// four things that left the laptop and survived` (добро, самоирония)
 - Колонки таблицы: `NAME | STACK | METRICS | STATUS` — оставить
-- Блюрбы проектов (описание в деталях) — переписать живо, НО с реальными цифрами и без воды:
-  - HabitForge: `Habit coach that lives on your phone. 111+ tests keep the bar high, 68 migrations keep the data honest, 12 edge functions do the heavy lifting.` (было: «Habit coach on device. Structured Gemini parses...» — слишком сухо)
-  - AI Chat: `Chat with 44 personas without ever leaving the browser. Tiered access, local models for the free crowd, FastAPI holding it all together.` 
-  - SLE Terminal: `A trading terminal that has seen 5 years of M5 data and didn't blink. 18K+ LOC of Python+TS, XGBoost keeping the gate.`
-  - Thesis: `RAG pipeline with guardrails that actually guard. Loop engineering, because first drafts are for losers. Target 2027 — real work, not slideware.`
+- Блюрбы проектов (описание в деталях) — переписать тепло, НО с реальными цифрами и без воды:
+  - HabitForge: `A habit coach that lives on your phone and nags nicely. 111+ tests, 68 migrations, 12 edge functions — the bar stays high.` (тепло, «nags nicely»)
+  - AI Chat: `44 personas, 3 tiers, 2 local models that cost nothing to run. Pick a character, it'll talk back.` (живо, без канцелярита)
+  - SLE Terminal: `A trading terminal that watched 5 years of M5 data and never blinked. 18K+ LOC of patience.` (тепло, «patience»)
+  - Thesis: `RAG pipeline with guardrails that actually guard. Loop engineering because first drafts are for losers. 2027 — real work, not slideware.` (оставить как есть — уже хорошо)
 
 **STACK (панель 03):**
 - Заголовок: `LOADED KERNEL` + `// loaded` — оставить
@@ -221,7 +221,7 @@ footer (sysbar)      — v1.0 · PREŠOV · время · OPEN TO WORK
 
 **CHANGELOG (клик по v1.0):** — заголовки версий оставить, но добавить добрые описания фич:
 - `FAKE NEWS ticker · boot modal · mascot moods` → `FAKE NEWS ticker (nothing here is true, obviously) · boot modal · mascot moods`
-- `PROJECTS catalog table with TYPE/SORT` → `PROJECTS catalog — filter, sort, stare at metrics`
+- `PROJECTS catalog table with TYPE/SORT` → `PROJECTS catalog — filter, sort, poke at numbers`
 - `RadioDock in WHOAMI flow (closable + lo-fi)` → `RadioDock — real lofi now, your ears can rest`
 - Остальные (Tabbed shell, WHOAMI polaroid, Hand callouts) — оставить
 
