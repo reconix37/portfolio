@@ -152,6 +152,8 @@ footer (sysbar)      — v1.0 · PREŠOV · время · OPEN TO WORK
 
 Сайт англоязычный — ВЕСЬ копирайт на английском. Вайб как у KISA: добрый, самоироничный, абсурдный, живой. ГЛАВНОЕ ПРАВИЛО: юмор НЕ привязан к стеку Дани — никаких evals/RAG/HabitForge/migrations/edge functions в шутках. У KISA заголовки — чистый абсурд про индустрию и жизнь («Спрос на хентай игры вырос на 665%», «Обнаружен новый вид приматов — вайбкодеры», «Британские ученые: у подписчиков Кисы половая жизнь активнее на 26%», «Gemini V4 pro научилась арифметике», «Налоговая в шоке: безработные платят $300/мес на AI подписки», «Ютуб-комментарии признаны самым нетоксичным местом»). Делаем так же.
 
+**ПОРЯДОК РАБОТЫ (важно):** пройдись по ВСЕМ видимым текстам на сайте — не только по списку ниже. Список ниже — обязательный минимум; если видишь ещё сухой/пафосный текст где-то (модалки, тултипы, подписи, терминал, футер) — перепиши его в том же добром тоне. Три правила: (1) английский; (2) смешно, но в пределах разумного — это рабочее портфолио, никакого NSFW/пошлости; (3) шутки про индустрию/жизнь, не про стек Дани.
+
 **WHOAMI (hero):**
 - Кинкер: `// system online — ai/ml engineer · presov` (оставить)
 - Заголовок: `ai/ml engineer, thesis-in-progress, and an honest… good guy.` (строчные, многоточие, самоирония — как «…хороший парень» у KISA, но своё)
@@ -208,6 +210,33 @@ footer (sysbar)      — v1.0 · PREŠOV · время · OPEN TO WORK
 - Заголовок: `ESTABLISH CONNECTION` + `// 24h response` — оставить
 - Подзаголовок: `// $ netstat -an | grep LISTEN — click a row to connect` → `// channels are open — pick one, I actually reply` (добро)
 - Строка preferred: `>> OPEN TELEGRAM "..." — preferred` — оставить
+
+**QUOTE.TXT** (QuoteBlock, hero): `Ship evals before vibes. Structured output or it doesn't leave the laptop.` → `«I write code not because I have to, but because it's fun. Texts — for the same reason.»` (вайб KISA-цитаты, добро, без стека)
+
+**MAN PAGE (ManModal, клавиша ?):**
+- `NAME: daniil-os — personal portfolio as a desktop app` → `daniil-os — a portfolio pretending to be an OS. Everything here is real, except the window buttons.`
+- `RADIO: CHIPRADIO under WHOAMI stats — closable. Chip + lo-fi loops via WebAudio (no files).` → `RADIO: lofi radio under WHOAMI — real tracks now (was: chiptune synth, god rest its soul).` (после Шага 9 треки реальные — обновить)
+- `MASCOT: Follows cursor. Click = jump. Scroll panel = mood burst. Hover PROJECTS rows = react.` → `MASCOT: follows cursor, blinks, judges your code. Click her — she's been waiting.`
+- Остальные секции (TABS/TERMINAL/HOTKEYS) — оставить, они технические
+
+**CHANGELOG (клик по v1.0):** — заголовки версий оставить, но добавить добрые описания фич:
+- `FAKE NEWS ticker · boot modal · mascot moods` → `FAKE NEWS ticker (nothing here is true, obviously) · boot modal · mascot moods`
+- `PROJECTS catalog table with TYPE/SORT` → `PROJECTS catalog — filter, sort, stare at metrics`
+- `RadioDock in WHOAMI flow (closable + lo-fi)` → `RadioDock — real lofi now, your ears can rest`
+- Остальные (Tabbed shell, WHOAMI polaroid, Hand callouts) — оставить
+
+**BOOT MODAL:**
+- `[OK] cream/graphite/terracotta theme loaded` → `[OK] cream/graphite/terracotta theme loaded (as nature intended)`
+- `[OK] chipradio daemon spawned` → после Шага 9: `[OK] radio daemon spawned — real tracks, no oscillators harmed`
+- `[ READY ] daniil os v1.0 online_` → `[ READY ] daniil os v1.0 online — coffee in hand_` (добро)
+
+**FS MAP (кнопка MAP):**
+- `// click a path to cd` → `// click a path — it's a map, not a suggestion`
+- `hero · polaroid · radio · terminal` — оставить (технично)
+- `shipped modules catalog` → `shipped modules catalog (4, all real)`
+- `lsmod · loaded kernel` → `lsmod · loaded kernel (no bloatware)`
+- `training history` → `training history (still compiling)`
+- `establish connection` → `establish connection (channels open)`
 
 ### Шаг 9. РЕАЛЬНЫЕ ТРЕКИ вместо синтеза (Даня: «то, что там — пиздец»)
 
