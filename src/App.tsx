@@ -8,6 +8,7 @@ import { Stack } from "@/components/sections/Stack"
 import { Education } from "@/components/sections/Education"
 import { Contact } from "@/components/sections/Contact"
 import { Footer } from "@/components/Footer"
+import { ScrollProgress } from "@/components/ScrollProgress"
 
 export default function App(): ReactElement {
   const [mood, setMood] = useState<Mood>("idle")
@@ -16,6 +17,7 @@ export default function App(): ReactElement {
   return (
     <div className="relative min-h-screen bg-bg text-ink">
       <div className="pointer-events-none fixed inset-0 z-[90] opacity-50 scanlines" aria-hidden="true" />
+      <ScrollProgress />
       <Sysbar />
 
       <main>

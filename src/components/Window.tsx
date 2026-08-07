@@ -84,7 +84,7 @@ export function Window({
     >
       <div
         className={cn(
-          "flex items-center justify-between border-b-2 border-line bg-surface-2 px-4 py-2.5 text-xs tracking-[0.14em] uppercase select-none",
+          "flex touch-none items-center justify-between border-b-2 border-line bg-surface-2 px-4 py-2.5 text-xs tracking-[0.14em] uppercase select-none",
           enabled && "cursor-grab active:cursor-grabbing",
         )}
         onPointerDown={onPointerDown}
