@@ -3,6 +3,7 @@ import { Window } from "@/components/Window"
 import { Metric } from "@/components/Metric"
 import { Reveal } from "@/components/Reveal"
 import { SectionLabel } from "@/components/SectionLabel"
+import { SectionBadge } from "@/components/SectionBadge"
 import type { Mood } from "@/components/hero/Mascot"
 
 type Project = {
@@ -81,6 +82,7 @@ export function Projects({ onMood }: ProjectsProps): ReactElement {
           <Window num="01" title="PROJECTS">
             <h2 className="mb-5 text-[clamp(26px,4vw,40px)]">
               What I&apos;ve <span className="text-accent">built</span>
+              <SectionBadge text="// 4 shipped" />
             </h2>
             <p className="mb-9 max-w-[620px] text-ink-soft">
               Four products shipped end-to-end. Real numbers, real infra — not slideware.

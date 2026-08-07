@@ -2,6 +2,7 @@ import type { ReactElement } from "react"
 import { Window } from "@/components/Window"
 import { Reveal } from "@/components/Reveal"
 import { SectionLabel } from "@/components/SectionLabel"
+import { SectionBadge } from "@/components/SectionBadge"
 
 const LANGS = [
   { name: "Ukrainian", level: "NATIVE", width: "100%" },
@@ -19,6 +20,7 @@ export function Education(): ReactElement {
           <Window num="03" title="EDUCATION">
             <h2 className="mb-5 text-[clamp(26px,4vw,40px)]">
               School of <span className="text-accent">hard knocks</span>
+              <SectionBadge text="// in progress" />
             </h2>
             <p className="mb-9 max-w-[620px] text-ink-soft">
               TUKE, Faculty of Manufacturing Technologies, Prešov. Ing. in progress — thesis is the

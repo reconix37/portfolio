@@ -2,6 +2,7 @@ import type { ReactElement } from "react"
 import { Window } from "@/components/Window"
 import { Reveal } from "@/components/Reveal"
 import { SectionLabel } from "@/components/SectionLabel"
+import { SectionBadge } from "@/components/SectionBadge"
 
 type ContactItem = {
   label: string
@@ -69,6 +70,7 @@ export function Contact(): ReactElement {
           <Window num="04" title="CONTACT">
             <h2 className="mb-5 text-[clamp(26px,4vw,40px)]">
               Let&apos;s <span className="text-accent">talk</span>
+              <SectionBadge text="// 24h response" />
             </h2>
             <p className="mb-9 max-w-[620px] text-ink-soft">
               Open to AI/ML engineering roles and interesting builds. Response within 24h.

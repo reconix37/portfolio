@@ -2,6 +2,7 @@ import type { ReactElement } from "react"
 import { Window } from "@/components/Window"
 import { Reveal } from "@/components/Reveal"
 import { SectionLabel } from "@/components/SectionLabel"
+import { SectionBadge } from "@/components/SectionBadge"
 import { cn } from "@/lib/utils"
 
 type Tag = { label: string; hot?: boolean }
@@ -91,6 +92,7 @@ export function Stack(): ReactElement {
           <Window num="02" title="STACK">
             <h2 className="mb-5 text-[clamp(26px,4vw,40px)]">
               Toolkit <span className="text-accent">{"//"}</span>
+              <SectionBadge text="// loaded" />
             </h2>
             <p className="mb-9 max-w-[620px] text-ink-soft">
               The layers I actually use in production.{" "}
