@@ -163,6 +163,8 @@
   --animate-blink: blink 1.1s steps(1) infinite;
   --animate-langswap: langswap 0.45s ease;
   --animate-bandmove: bandmove 28s linear infinite;
+  --animate-mascot-bob: mascot-bob 3.5s ease-in-out infinite;
+  --animate-mascot-jump: mascot-jump 0.4s ease-out;
 }
 
 @keyframes blink {
@@ -179,9 +181,23 @@
   to { transform: translate3d(var(--band-shift, -50%), 0, 0); }
 }
 
+@keyframes mascot-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
+}
+
+@keyframes mascot-jump {
+  0% { transform: translateY(0); }
+  40% { transform: translateY(-12px); }
+  100% { transform: translateY(0); }
+}
+
 @layer base {
   * { @apply border-border outline-ring/50; }
-  html { scroll-behavior: smooth; }
+  html, body, #root {
+    height: 100%;
+    overflow: hidden;
+  }
   body {
     @apply bg-background text-foreground font-mono antialiased;
     transition: background .25s ease, color .25s ease;
