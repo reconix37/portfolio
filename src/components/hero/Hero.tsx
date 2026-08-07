@@ -1,24 +1,30 @@
-import type { ReactElement } from "react"
+import { forwardRef, type ReactElement } from "react"
 import { Mascot, type Mood } from "@/components/hero/Mascot"
 import { Terminal } from "@/components/hero/Terminal"
 
 interface HeroProps {
-  /** mascot mood override (hover reactions from App) */
   mood?: Mood
 }
 
-export function Hero({ mood }: HeroProps): ReactElement {
+export const Hero = forwardRef<HTMLElement, HeroProps>(function Hero(
+  { mood = "idle" },
+  ref,
+): ReactElement {
   return (
-    <header className="relative overflow-hidden border-b-2 border-line py-14 md:py-[72px] md:pb-20">
-      <div className="mx-auto grid max-w-[1080px] grid-cols-1 items-center gap-10 px-6 md:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] md:gap-14">
-        <div className="order-2 md:order-1">
+    <header
+      ref={ref}
+      className="relative overflow-hidden border-b-2 border-line py-14 md:py-[72px] md:pb-20"
+    >
+      <div className="wrap relative">
+        {/* текст: на md оставляем место справа под маскота, без второй колонки грида */}
+        <div className="relative z-10 md:max-w-[calc(100%-220px)] md:pr-6">
           <p className="mb-5 text-[13px] tracking-[0.14em] text-muted uppercase">
             <b className="font-bold text-accent">system online</b>
             {" — "}
             ai/ml engineer · presov
           </p>
 
-          <h1 className="mb-2 text-[clamp(44px,7vw,84px)]">
+          <h1 className="mb-2 text-[clamp(40px,6vw,78px)]">
             <span className="hero-outline">DANIIL</span>
             <br />
             VERKHOVSKYI<span className="text-accent">.</span>
@@ -47,14 +53,15 @@ export function Hero({ mood }: HeroProps): ReactElement {
           </div>
         </div>
 
-        <div className="order-1 md:order-2">
-          <Mascot mood={mood} />
+        {/* absolute — вне потока, сайт не сдвигается */}
+        <div className="pointer-events-none mt-8 flex justify-center md:absolute md:top-0 md:right-0 md:mt-0 md:block">
+          <Mascot mood={mood} size={200} />
         </div>
-      </div>
 
-      <div className="mx-auto mt-10 max-w-[1080px] px-6 md:mt-14">
-        <Terminal />
+        <div className="relative z-10 mt-10 md:mt-14">
+          <Terminal />
+        </div>
       </div>
     </header>
   )
-}
+})

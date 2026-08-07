@@ -1,52 +1,34 @@
-import { useState, type ReactElement } from "react"
+import { useRef, useState, type ReactElement } from "react"
 import { Sysbar } from "@/components/Sysbar"
 import { Hero } from "@/components/hero/Hero"
-import type { Mood } from "@/components/hero/Mascot"
+import { FloatingMascot, type Mood } from "@/components/hero/Mascot"
+import { Band } from "@/components/Band"
+import { Projects } from "@/components/sections/Projects"
+import { Stack } from "@/components/sections/Stack"
+import { Education } from "@/components/sections/Education"
+import { Contact } from "@/components/sections/Contact"
+import { Footer } from "@/components/Footer"
 
 export default function App(): ReactElement {
   const [mood, setMood] = useState<Mood>("idle")
+  const heroRef = useRef<HTMLElement>(null)
 
   return (
-    <main className="min-h-screen">
+    <div className="relative min-h-screen bg-bg text-ink">
+      <div className="pointer-events-none fixed inset-0 z-[90] opacity-50 scanlines" aria-hidden="true" />
       <Sysbar />
-      <Hero mood={mood} />
 
-      {/* hover-reaction demo — remove in production, sections land via Cursor */}
-      <section className="border-b-2 border-line">
-        <div className="mx-auto max-w-[1080px] px-6 py-12">
-          <div className="mb-6 text-xs uppercase tracking-[.12em] text-muted">
-            <b className="text-accent">demo</b> — hover a project → mascot reacts
-          </div>
-          <div className="grid gap-4 sm:grid-cols-3">
-            {(
-              [
-                ["HabitForge", "happy"],
-                ["AI Chat", "surprised"],
-                ["SLE Terminal", "skeptical"],
-              ] as [string, Mood][]
-            ).map(([name, m]) => (
-              <div
-                key={name}
-                onMouseEnter={() => setMood(m)}
-                onMouseLeave={() => setMood("idle")}
-                className="border-2 border-line bg-surface p-5 shadow-[4px_4px_0_var(--line)] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0_var(--line)]"
-              >
-                <div className="font-display text-lg font-extrabold">{name}</div>
-                <div className="mt-1 text-xs text-muted">hover → {m}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <main>
+        <Hero ref={heroRef} mood={mood} />
+        <Band />
+        <Projects onMood={setMood} />
+        <Stack />
+        <Education />
+        <Contact />
+      </main>
 
-      <footer className="border-t-2 border-line bg-surface">
-        <div className="mx-auto flex max-w-[1080px] flex-wrap items-center justify-between gap-2 px-6 py-4 text-xs uppercase tracking-[.1em] text-ink-soft">
-          <div>
-            <b className="text-ok">DANIIL OS</b> · PREŠOV · <span className="text-ink">v1.0</span>
-          </div>
-          <div>© 2026 · built by hand</div>
-        </div>
-      </footer>
-    </main>
+      <FloatingMascot mood={mood} hideWhenVisibleRef={heroRef} />
+      <Footer />
+    </div>
   )
 }
