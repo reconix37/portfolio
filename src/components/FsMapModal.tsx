@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils"
 const TREE: { path: string; id: TabId; hint: string }[] = [
   { path: "/whoami", id: "whoami", hint: "hero · polaroid · radio · terminal" },
   { path: "/projects", id: "projects", hint: "shipped modules catalog" },
-  { path: "/stack", id: "stack", hint: "loaded kernel tags" },
+  { path: "/stack", id: "stack", hint: "lsmod · loaded kernel" },
   { path: "/education", id: "education", hint: "training history" },
   { path: "/contact", id: "contact", hint: "establish connection" },
 ]

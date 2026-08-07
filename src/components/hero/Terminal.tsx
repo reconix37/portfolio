@@ -38,7 +38,7 @@ const HELP_LINES = [
   "help          list commands",
   "whoami        identity",
   "projects      shipped modules",
-  "contact       email + github",
+  "contact       email + github + telegram",
   "stack         core toolkit",
   "theme         toggle light/dark",
   "clear         clear screen",
@@ -119,8 +119,10 @@ function runCommand(raw: string): TermLine[] {
   }
   if (cmd === "contact") {
     return [
-      { text: "email   verchovskyidania@gmail.com", cls: "c" },
-      { text: "github  github.com/reconix37", cls: "c" },
+      { text: "email     verchovskyidania@gmail.com", cls: "c" },
+      { text: "github    github.com/reconix37", cls: "c" },
+      { text: "linkedin  linkedin.com/in/daniil-verkhovskyi", cls: "c" },
+      { text: "telegram  @verkhovskyi  ★ preferred", cls: "ok" },
     ]
   }
   if (cmd === "stack") {
