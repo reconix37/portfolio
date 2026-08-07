@@ -148,43 +148,39 @@ footer (sysbar)      — v1.0 · PREŠOV · время · OPEN TO WORK
 - Убрать дубли: старые секции-компоненты (sections/Projects.tsx и т.д.), которые не влезают в новую структуру — удалить, заменить на tabs/
 - Footer оставить
 
-### Шаг 8. ДОБРЫЙ КОПИРАЙТ — на АНГЛИЙСКОМ, живой, в вайбе KISA (deploychan.webcam)
+### Шаг 8. ДОБРЫЙ КОПИРАЙТ — на АНГЛИЙСКОМ, абсурдный, в вайбе KISA (deploychan.webcam)
 
-Сайт англоязычный — ВЕСЬ копирайт на английском. Вайб как у KISA: добрый, самоироничный, живой, местами абсурдный — НЕ пафос («survive production» — слишком серьёзно), НЕ сухой. И главное: тексты должны звучать как цельный голос Дани, а не как переименованные старые заголовки — не «цепляйся к существующему», пиши заново.
-
-Референс-вайб KISA (настроение, НЕ переводить дословно): «крипто(?)-энтузиаст, ВАЙБКОДЕР, и просто …хороший парень», «24/7 ВЕРЕН СВОЕМУ ДЕЛУ», «навайбкожен с Claude Code», абсурдный FAKE NEWS-тикер.
-
-Использовать эти тексты (можно точечно варьировать формулировки, сохраняя тон и смысл):
+Сайт англоязычный — ВЕСЬ копирайт на английском. Вайб как у KISA: добрый, самоироничный, абсурдный, живой. ГЛАВНОЕ ПРАВИЛО: юмор НЕ привязан к стеку Дани — никаких evals/RAG/HabitForge/migrations/edge functions в шутках. У KISA заголовки — чистый абсурд про индустрию и жизнь («Спрос на хентай игры вырос на 665%», «Обнаружен новый вид приматов — вайбкодеры», «Британские ученые: у подписчиков Кисы половая жизнь активнее на 26%», «Gemini V4 pro научилась арифметике», «Налоговая в шоке: безработные платят $300/мес на AI подписки», «Ютуб-комментарии признаны самым нетоксичным местом»). Делаем так же.
 
 **WHOAMI (hero):**
 - Кинкер: `// system online — ai/ml engineer · presov` (оставить)
 - Заголовок: `ai/ml engineer, thesis-in-progress, and an honest… good guy.` (строчные, многоточие, самоирония — как «…хороший парень» у KISA, но своё)
-- Подзаголовок: `By day: RAG, structured LLM output, evals that actually catch things. By night: wondering why the 68th migration broke.` (живо, самоирония, реальные цифры)
-- Строка под терминалом: `>> 4 products in production · 0 slideware`
+- Подзаголовок: `I build things that work when it matters. Then I write about it like it was easy.` (живо, самоирония, БЕЗ упоминания стека)
+- Строка под терминалом: `>> 4 products in production · 0 slideware` (факт, без юмора — это серьёзная строка)
 
-**FAKE NEWS тикер** — абсурдные заголовки про Данины проекты и AI-индустрию (англ):
+**FAKE NEWS тикер** — абсурдные заголовки про AI-индустрию и жизнь (англ), НЕ про проекты Дани. Взять за основу эти (можно варьировать, сохраняя тон):
 - `Scientists baffled: new primate species discovered — vibe coders from Prešov`
-- `HabitForge: 111+ tests passed, zero bugs escaped`
-- `AI Chat: 44 personas refuse to strike, demand more tokens`
-- `British scientists: RAG guardrails now stronger than bank vaults`
-- `SLE Terminal: 5 years of M5 data finally met their engineer`
-- `Thesis 2027: loop engineering looped so hard it broke the time loop`
-- `OpenAI shocked: student from Prešov builds RAG without their API`
-- `12 edge functions work through lunch, union stays silent`
-- `Code review passed: 0 AI slop — mascot checked personally`
-- `Tax office in shock: local models dropped API bills to zero`
-- `Terracotta #C45C4A declared the most stable asset by Fed`
-- `YouTube comments now less toxic than CI without evals`
+- `Demand for AI hentai games up 665%, analysts speechless`
+- `British scientists: newsletter subscribers now 26% happier in life`
+- `OpenAI buys Dota 2, community asks why`
+- `New Gemini model finally learns basic arithmetic`
+- `Tax office in shock: unemployed pay $300/month on AI subscriptions`
+- `Fed announces plans to cut cryptoans, market confused`
+- `Morrowind gets DLC in August 2026, fans cry tears of joy`
+- `YouTube comments officially declared the least toxic place on the internet`
+- `Statistics show: writing fake news uses 90% of brain resources`
+- `Vibe coders outnumber real coders, nobody notices the difference`
+- `AI agent in a Chinese robot body applies for night shift at the club`
 
-**QUOTE.TXT** (цитата в hero): `«I deploy at 3am not because something's on fire — that's just when the evals are quiet.»`
+**QUOTE.TXT** (цитата в hero): `«I write code not because I have to, but because it's fun. Texts — for the same reason.»` (это перевод вайба KISA-цитаты «Пишу код не потому что надо, а потому что кайфово»)
 
-**Метрики в hero** (цифры НЕ менять, лейблы переписать живо):
+**Метрики в hero** (цифры НЕ менять, лейблы живо, без привязки к стеку):
 - `4 SHIPPED MODULES` → `4 PRODUCTS IN PRODUCTION`
 - `111+ TEST SUITES` → `111+ TESTS, ALL GREEN`
 - `44 CHAT PERSONAS` → `44 CHAT PERSONAS`
-- `18K+ LOC · SLE` → `18K+ LOC OF SLE`
+- `18K+ LOC · SLE` → `18K+ LINES OF CODE`
 
-**Футер**: `STATUS: OPEN TO WORK` → `STATUS: OPEN TO WORK · ALWAYS SHIPPING` (или `24/7 ON THE JOB` — как «24/7 ВЕРЕН СВОЕМУ ДЕЛУ» у KISA); `© 2026 · built by hand` → `© 2026 · vibe-coded with Claude Code`
+**Футер**: `STATUS: OPEN TO WORK` → `STATUS: OPEN TO WORK · 24/7 ON THE JOB` (как «24/7 ВЕРЕН СВОЕМУ ДЕЛУ» у KISA); `© 2026 · built by hand` → `© 2026 · made with too much coffee` (НЕ «Claude Code» — Даня не им делал)
 
 ### Шаг 9. РЕАЛЬНЫЕ ТРЕКИ вместо синтеза (Даня: «то, что там — пиздец»)
 
