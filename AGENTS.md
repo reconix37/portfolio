@@ -33,6 +33,16 @@ footer (sysbar)      — v1.0 · PREŠOV · время · OPEN TO WORK
 
 Рефакторинг выполнен: сайт = приложение с вкладками (WHOAMI/PROJECTS/STACK/EDUCATION/CONTACT/RADIO), AppFrame, каталог-таблица, CHIPRADIO, маскот-анимации. Ниже — архив ТЗ.
 
+## ⚡ CURRENT TASK v3 — ДЕЛАЙ ЭТО СЕЙЧАС (после чтения архива v2, если нужно)
+
+Даня прислал два жёстких фидбека по текущему состоянию: (1) копирайт — не тот, нужен добрый/живой/на английском как у KISA; (2) радио играет синтез-«пиздец» — заменить на реальные mp3 (уже скачаны в `public/music/`). Выполни Шаги 8-10 из архива ниже, они актуальны. Короткая выжимка:
+
+**Шаг 8 (копирайт):** весь текст — на английском, живой/самоироничный в вайбе KISA. Точные тексты — в архиве, Шаг 8.
+**Шаг 9 (треки):** `chipRadio.tsx` — заменить WebAudio-осцилляторы на `<audio>` с реальными файлами из `public/music/` (7 mp3, Jamendo CC). Точный маппинг треков — в архиве, Шаг 9.
+**Шаг 10:** проверка build + вкладки + радио + тёмная тема + FakeNews + маскот.
+
+После каждого шага — `npm run build` + коммит. В конце — push в main.
+
 <details><summary>Архив ТЗ CURRENT TASK v2</summary>
 
 ## CURRENT TASK v2 (архив) — ПОЛНЫЙ РЕФАКТОРИНГ: сайт = приложение с вкладками
@@ -138,39 +148,43 @@ footer (sysbar)      — v1.0 · PREŠOV · время · OPEN TO WORK
 - Убрать дубли: старые секции-компоненты (sections/Projects.tsx и т.д.), которые не влезают в новую структуру — удалить, заменить на tabs/
 - Footer оставить
 
-### Шаг 8. ДОБРЫЙ КОПИРАЙТ — как у KISA (deploychan.webcam)
+### Шаг 8. ДОБРЫЙ КОПИРАЙТ — на АНГЛИЙСКОМ, живой, в вайбе KISA (deploychan.webcam)
 
-Даня хочет тексты как на deploychan.webcam: добрые, самоироничные, местами абсурдные, с юмором в неважных местах. НЕ пафос и НЕ «I build AI products that survive production» — это слишком серьёзно. Примеры вайба KISA: «крипто(?)-энтузиаст, ВАЙБКОДЕР, и просто …хороший парень», метрика «24/7 ВЕРЕН СВОЕМУ ДЕЛУ», QUOTE.TXT «Пишу код не потому что надо, а потому что кайфово», FAKE NEWS-тикер с абсурдными заголовками («Ученые в шоке: обнаружен новый вид приматов — вайбкодеры», «Британские ученые: у подписчиков Кисы половая жизнь активнее на 26%»), футер «навайбкожен с Claude Code».
+Сайт англоязычный — ВЕСЬ копирайт на английском. Вайб как у KISA: добрый, самоироничный, живой, местами абсурдный — НЕ пафос («survive production» — слишком серьёзно), НЕ сухой. И главное: тексты должны звучать как цельный голос Дани, а не как переименованные старые заголовки — не «цепляйся к существующему», пиши заново.
 
-Заменить тексты (точные, НЕ переписывать своими словами):
+Референс-вайб KISA (настроение, НЕ переводить дословно): «крипто(?)-энтузиаст, ВАЙБКОДЕР, и просто …хороший парень», «24/7 ВЕРЕН СВОЕМУ ДЕЛУ», «навайбкожен с Claude Code», абсурдный FAKE NEWS-тикер.
 
-**WHOAMI:**
-- Заголовок hero: `ai/ml инженер, соискатель-выживальщик, и просто …хороший парень.` (строчные, как у KISA; «…хороший парень.» — с многоточием)
-- Подзаголовок: `Между прочим, пишу AI-продукты от данных до продакшена. Генеративные пайплайны, структурный LLM-вывод, эвалы — то, что не разваливается под нагрузкой.` (тон — «между прочим», как у KISA)
-- Строка под терминалом: `>> 4 продукта в проде · 0 слайдуара` (заменить `4 products shipped · 0 slideware`)
+Использовать эти тексты (можно точечно варьировать формулировки, сохраняя тон и смысл):
 
-**FAKE NEWS тикер** — заменить заголовки на абсурдные/смешные, в стиле KISA (про Даню, его проекты, AI-индустрию). Примеры (можно варьировать, сохраняя тон):
-- `Ученые в шоке: обнаружен новый вид приматов — вайбкодеры из Прешова`
-- `HabitForge: 111+ тестов прошли, баги не вышли на свободу`
-- `AI Chat: 44 персоны отказались бастовать, требуют повышения токенов`
-- `Британские ученые: у владельцев RAG-ассистентов guardrails крепче, чем у банков`
-- `SLE Terminal: 5 лет M5-данных ждали именно этого инженера`
-- `Диплом 2027: loop engineering настолько зациклился, что петля времени разомкнулась`
-- `OpenAI в шоке: студент из Прешова строит RAG без их API`
-- `ФРС в панике: терракотовый #C45C4A признан самым стабильным активом`
-- `12 edge functions работают без перерыва на обед, профсоюз молчит`
-- `Налоговая в шоке: бесплатные локальные модели снизили расходы на API до нуля`
-- `Код ревью пройдено: 0 AI-слопа, маскот-тян лично проверила`
-- `Ютуб-комментарии признаны менее токсичным местом, чем CI без эвалов`
+**WHOAMI (hero):**
+- Кинкер: `// system online — ai/ml engineer · presov` (оставить)
+- Заголовок: `ai/ml engineer, thesis-in-progress, and an honest… good guy.` (строчные, многоточие, самоирония — как «…хороший парень» у KISA, но своё)
+- Подзаголовок: `By day: RAG, structured LLM output, evals that actually catch things. By night: wondering why the 68th migration broke.` (живо, самоирония, реальные цифры)
+- Строка под терминалом: `>> 4 products in production · 0 slideware`
 
-**QUOTE.TXT** (цитата в hero): `«Пишу код не потому что надо, а потому что кайфово. Тексты — по той же причине.»` → заменить на свою, в том же тоне: `«Деплою в три ночи не потому что горит, а потому что в это время эвалы не мешают.»` (или аналогичную добрую/самоироничную)
+**FAKE NEWS тикер** — абсурдные заголовки про Данины проекты и AI-индустрию (англ):
+- `Scientists baffled: new primate species discovered — vibe coders from Prešov`
+- `HabitForge: 111+ tests passed, zero bugs escaped`
+- `AI Chat: 44 personas refuse to strike, demand more tokens`
+- `British scientists: RAG guardrails now stronger than bank vaults`
+- `SLE Terminal: 5 years of M5 data finally met their engineer`
+- `Thesis 2027: loop engineering looped so hard it broke the time loop`
+- `OpenAI shocked: student from Prešov builds RAG without their API`
+- `12 edge functions work through lunch, union stays silent`
+- `Code review passed: 0 AI slop — mascot checked personally`
+- `Tax office in shock: local models dropped API bills to zero`
+- `Terracotta #C45C4A declared the most stable asset by Fed`
+- `YouTube comments now less toxic than CI without evals`
 
-**Метрики в hero** (сейчас: 4 SHIPPED MODULES / 111+ TEST SUITES / 44 CHAT PERSONAS / 18K+ LOC):
-- Заменить лейблы на добрые: `4 ВОСТРЕБОВАННЫХ ПРОДУКТА`, `111+ ТЕСТОВ И НИ ОДНОГО ЛИШНЕГО`, `44 ПЕРСОНЫ В ЧАТЕ`, `18K+ СТРОК КОДА БЕЗ AI-СЛОПА` (цифры НЕ менять, только лейблы)
+**QUOTE.TXT** (цитата в hero): `«I deploy at 3am not because something's on fire — that's just when the evals are quiet.»`
 
-**Метрика в футере**: `STATUS: OPEN TO WORK` → `STATUS: OPEN TO WORK · 24/7 ВЕРЕН СВОЕМУ ДЕЛУ` (как у KISA)
+**Метрики в hero** (цифры НЕ менять, лейблы переписать живо):
+- `4 SHIPPED MODULES` → `4 PRODUCTS IN PRODUCTION`
+- `111+ TEST SUITES` → `111+ TESTS, ALL GREEN`
+- `44 CHAT PERSONAS` → `44 CHAT PERSONAS`
+- `18K+ LOC · SLE` → `18K+ LOC OF SLE`
 
-**Футер**: `© 2026 · built by hand` → `© 2026 · навайбкожен с Claude Code` (как у KISA «навайбкожен с Claude Code»)
+**Футер**: `STATUS: OPEN TO WORK` → `STATUS: OPEN TO WORK · ALWAYS SHIPPING` (или `24/7 ON THE JOB` — как «24/7 ВЕРЕН СВОЕМУ ДЕЛУ» у KISA); `© 2026 · built by hand` → `© 2026 · vibe-coded with Claude Code`
 
 ### Шаг 9. РЕАЛЬНЫЕ ТРЕКИ вместо синтеза (Даня: «то, что там — пиздец»)
 
