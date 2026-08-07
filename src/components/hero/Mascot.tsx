@@ -4,10 +4,13 @@ import {
   type ReactElement,
   type RefObject,
 } from "react"
-import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion"
 import { cn } from "@/lib/utils"
 
 export type Mood = "idle" | "happy" | "surprised" | "skeptical"
+
+/** Hero — крупный якорь рядом с именем. Float — отдельный мини-виджет в углу. */
+export const MASCOT_SIZE_HERO = 280
+export const MASCOT_SIZE_FLOAT = 128
 
 const SPRITES: Record<Mood, string> = {
   idle: "/mascot/mascot-idle.png",
@@ -16,32 +19,41 @@ const SPRITES: Record<Mood, string> = {
   skeptical: "/mascot/mascot-skeptical.png",
 }
 
+const SPRITE_URLS = Object.values(SPRITES)
+
 interface MascotProps {
   mood?: Mood
   className?: string
   size?: number
 }
 
-/** Pixel cat-robot. Спрайты центрированы — смена mood без прыжков. */
-export function Mascot({ mood = "idle", className, size = 200 }: MascotProps): ReactElement {
-  const reduced = usePrefersReducedMotion()
+/** Pixel cat-robot. Размер задаёт родитель (hero ≠ float), без remount на mood. */
+export function Mascot({
+  mood = "idle",
+  className,
+  size = MASCOT_SIZE_HERO,
+}: MascotProps): ReactElement {
+  useEffect(() => {
+    for (const url of SPRITE_URLS) {
+      const img = new Image()
+      img.src = url
+    }
+  }, [])
 
   return (
     <div
-      className={cn("relative shrink-0", className)}
+      className={cn("relative shrink-0 overflow-hidden", className)}
       style={{ width: size, height: size }}
       role="img"
       aria-label={`DANIIL OS mascot — ${mood}`}
     >
       <img
-        key={mood}
         src={SPRITES[mood]}
         alt=""
+        width={size}
+        height={size}
         draggable={false}
-        className={cn(
-          "block h-full w-full object-contain",
-          !reduced && "animate-mascot-in",
-        )}
+        className="pointer-events-none block size-full max-w-none object-contain"
         style={{ imageRendering: "pixelated" }}
       />
     </div>
@@ -54,7 +66,7 @@ interface FloatingMascotProps {
   hideWhenVisibleRef: RefObject<HTMLElement | null>
 }
 
-/** Fixed overlay: не жмёт лэйаут, виден при hover проектов. */
+/** Fixed overlay в углу — заведомо меньше hero, без мигания на пороге. */
 export function FloatingMascot({
   mood,
   hideWhenVisibleRef,
@@ -64,14 +76,41 @@ export function FloatingMascot({
   useEffect(() => {
     const el = hideWhenVisibleRef.current
     if (!el) return
-    if (!window.matchMedia("(min-width: 768px)").matches) return
 
-    const io = new IntersectionObserver(
-      ([entry]) => setShow(!entry.isIntersecting),
-      { threshold: 0.15 },
-    )
-    io.observe(el)
-    return () => io.disconnect()
+    const mq = window.matchMedia("(min-width: 768px)")
+    let io: IntersectionObserver | null = null
+
+    const disconnect = (): void => {
+      io?.disconnect()
+      io = null
+    }
+
+    const observe = (): void => {
+      disconnect()
+      if (!mq.matches) {
+        setShow(false)
+        return
+      }
+      io = new IntersectionObserver(
+        ([entry]) => {
+          const ratio = entry.intersectionRatio
+          setShow((prev) => {
+            if (ratio >= 0.2) return false
+            if (ratio <= 0.05) return true
+            return prev
+          })
+        },
+        { threshold: [0, 0.05, 0.1, 0.2, 0.35, 0.5, 1] },
+      )
+      io.observe(el)
+    }
+
+    observe()
+    mq.addEventListener("change", observe)
+    return () => {
+      mq.removeEventListener("change", observe)
+      disconnect()
+    }
   }, [hideWhenVisibleRef])
 
   if (!show) return null
@@ -79,7 +118,7 @@ export function FloatingMascot({
   return (
     <div className="pointer-events-none fixed right-5 bottom-5 z-40 hidden md:block">
       <div className="border-2 border-line bg-surface p-2 shadow-[4px_4px_0_var(--line)]">
-        <Mascot mood={mood} size={120} />
+        <Mascot mood={mood} size={MASCOT_SIZE_FLOAT} />
       </div>
     </div>
   )

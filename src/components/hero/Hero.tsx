@@ -1,5 +1,5 @@
 import { forwardRef, type ReactElement } from "react"
-import { Mascot, type Mood } from "@/components/hero/Mascot"
+import { Mascot, MASCOT_SIZE_HERO, type Mood } from "@/components/hero/Mascot"
 import { Terminal } from "@/components/hero/Terminal"
 
 interface HeroProps {
@@ -16,8 +16,8 @@ export const Hero = forwardRef<HTMLElement, HeroProps>(function Hero(
       className="relative overflow-hidden border-b-2 border-line py-14 md:py-[72px] md:pb-20"
     >
       <div className="wrap relative">
-        {/* текст: на md оставляем место справа под маскота, без второй колонки грида */}
-        <div className="relative z-10 md:max-w-[calc(100%-220px)] md:pr-6">
+        {/* текст: место справа под крупного маскота */}
+        <div className="relative z-10 md:max-w-[calc(100%-300px)] md:pr-6">
           <p className="mb-5 text-[13px] tracking-[0.14em] text-muted uppercase">
             <b className="font-bold text-accent">system online</b>
             {" — "}
@@ -53,9 +53,9 @@ export const Hero = forwardRef<HTMLElement, HeroProps>(function Hero(
           </div>
         </div>
 
-        {/* absolute — вне потока, сайт не сдвигается */}
-        <div className="pointer-events-none mt-8 flex justify-center md:absolute md:top-0 md:right-0 md:mt-0 md:block">
-          <Mascot mood={mood} size={200} />
+        {/* absolute — якорь у имени, не сжимает лэйаут */}
+        <div className="pointer-events-none mt-8 flex justify-center md:absolute md:top-6 md:-right-2 md:mt-0 md:block lg:right-0">
+          <Mascot mood={mood} size={MASCOT_SIZE_HERO} />
         </div>
 
         <div className="relative z-10 mt-10 md:mt-14">
