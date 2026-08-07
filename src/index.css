@@ -160,6 +160,17 @@
   --color-card: var(--card);
   --color-foreground: var(--foreground);
   --color-background: var(--background);
+  --animate-blink: blink 1.1s steps(1) infinite;
+  --animate-langswap: langswap 0.45s ease;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+@keyframes langswap {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
 }
 
 @layer base {
@@ -176,4 +187,53 @@
     line-height: 1.05;
   }
   a { @apply text-accent; }
+
+  /* brutalist buttons */
+  .btn {
+    @apply inline-block font-mono text-[13px] uppercase tracking-[.1em] px-5 py-3;
+    border: 2px solid var(--line);
+    box-shadow: 3px 3px 0 var(--line);
+    color: var(--ink);
+    transition: box-shadow .12s ease, transform .12s ease, background .12s ease;
+  }
+  .btn:hover {
+    box-shadow: 5px 5px 0 var(--line);
+    transform: translate(-2px, -2px);
+    text-decoration: none;
+  }
+  .btn-solid { background: var(--accent); color: var(--bg); }
+  .btn-solid:hover { background: var(--accent); }
+  .btn-line:hover { background: var(--accent-2); }
+  .dark .btn-solid { color: #121110; }
+  .dark .btn-line:hover { color: #121110; }
+
+  /* page wrap */
+  .wrap { @apply mx-auto max-w-[1080px] px-6; }
+}
+
+@layer utilities {
+  .hero-outline {
+    color: transparent;
+    -webkit-text-stroke: 2px var(--ink);
+  }
+
+  .scanlines {
+    background: repeating-linear-gradient(
+      0deg,
+      transparent 0px,
+      transparent 3px,
+      var(--scanline) 3px,
+      var(--scanline) 4px
+    );
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

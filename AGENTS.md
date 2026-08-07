@@ -12,7 +12,7 @@ shadcn компоненты добавлять через `npx shadcn@latest add
 1. **БЕЗ AI-слопа.** Запрещено: градиенты (особенно сине-фиолетовые), glassmorphism, карточки-тайлы (иконка+заголовок+текст ×3), accent-полоски на карточках, иконки в кружках над заголовками, всё по центру без композиции, Inter/system-ui, эмодзи в UI (только inline SVG с fill=currentColor).
 2. **Только реальные метрики.** HabitForge: 111+ тестов, 68 pg-миграций RLS, 12 edge functions, 95%+ parse success. AI Chat: 44 персоны, 3 тарифа, 2 бесплатные локальные модели. SLE Terminal: 18K+ LOC, 11 REST-роутеров, 5+ лет M5-данных. Выдумывать цифры нельзя.
 3. **Тексты прямые, без воды.** Никаких «passionate», «crafting experiences», «seamless», «unleash». Факты, короткие предложения.
-4. **Маскот** — пиксельный SVG-агент (монитор-голова, глаза следят за курсором). Inline SVG, не картинка.
+4. **Маскот** — пиксельный кот-робот (сгенерирован через ChatGPT, PNG-спрайты в `public/mascot/`): `mascot-idle.png`, `mascot-happy.png`, `mascot-surprised.png`, `mascot-skeptical.png` (+ `mascot-spritesheet.png` — 2×2 сетка). Компонент `src/components/Mascot.tsx` — проп `mood: 'idle'|'happy'|'surprised'|'skeptical'`, кроссфейд при смене, параллакс за курсором. Реакции: hover проекта → смена эмоции. НЕ заменять на картинку-другой-формат без согласования.
 5. **Доступность:** focus-состояния, prefers-reduced-motion, семантический HTML, кликабельные зоны ≥44px.
 6. Один PR/коммит = одна логическая единица. Проверяй `npm run build` перед коммитом.
 
