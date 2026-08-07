@@ -11,9 +11,8 @@ import { cn } from "@/lib/utils"
 
 export type Mood = "idle" | "happy" | "surprised" | "skeptical"
 
-/** Hero — крупный якорь рядом с именем. Float — отдельный мини-виджет в углу. */
+/** Hero — крупный якорь рядом с именем. Float — адаптивный стикер (CSS clamp). */
 export const MASCOT_SIZE_HERO = 280
-export const MASCOT_SIZE_FLOAT = 128
 
 const SPRITES: Record<Mood, string> = {
   idle: "/mascot/mascot-idle.png",
@@ -192,14 +191,21 @@ export function FloatingMascot({
   if (!show) return null
 
   return (
-    <div className="pointer-events-none fixed right-5 bottom-16 z-40 hidden md:block">
+    <div className="pointer-events-none fixed right-3 bottom-14 z-40 hidden md:block lg:right-5 lg:bottom-16">
       <div
         className={cn(
-          "border-2 border-line bg-bg p-1.5 shadow-[4px_4px_0_var(--line)]",
+          "border-2 border-line bg-bg p-1.5 shadow-[4px_4px_0_var(--line)] lg:p-2",
           !reduced && "motion-safe:animate-mascot-bob",
         )}
       >
-        <div className="relative size-[104px] overflow-hidden border-2 border-line">
+        {/* полный рост; size от vmin — ноут ~150, 1440p ~290, 4K до 340 */}
+        <div
+          className="relative overflow-hidden border-2 border-line bg-bg"
+          style={{
+            width: "clamp(132px, 20vmin, 340px)",
+            height: "clamp(132px, 20vmin, 340px)",
+          }}
+        >
           {MOODS.map((m) => (
             <img
               key={m}
@@ -207,7 +213,7 @@ export function FloatingMascot({
               alt=""
               draggable={false}
               className={cn(
-                "pointer-events-none absolute top-0 left-1/2 w-[185%] max-w-none -translate-x-1/2 transition-opacity duration-500 ease-in-out",
+                "pointer-events-none absolute inset-0 size-full max-w-none object-contain transition-opacity duration-500 ease-in-out",
                 mood === m ? "opacity-100" : "opacity-0",
               )}
             />

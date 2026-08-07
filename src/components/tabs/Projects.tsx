@@ -73,11 +73,7 @@ const PROJECTS: ProjectRow[] = [
   },
 ]
 
-interface ProjectsProps {
-  onMood: (mood: Mood) => void
-}
-
-export function Projects({ onMood }: ProjectsProps): ReactElement {
+export function Projects(): ReactElement {
   const [filter, setFilter] = useState<Filter>("ALL")
   const [sort, setSort] = useState<Sort>("RECOMMENDED")
   const [selected, setSelected] = useState<string | null>(null)
@@ -187,10 +183,6 @@ export function Projects({ onMood }: ProjectsProps): ReactElement {
                       i % 2 === 1 ? "bg-surface" : "bg-transparent",
                       selected === row.name && "bg-accent-2/40",
                     )}
-                    onMouseEnter={() => onMood(row.mood)}
-                    onMouseLeave={() => onMood("idle")}
-                    onFocus={() => onMood(row.mood)}
-                    onBlur={() => onMood("idle")}
                     onClick={() =>
                       setSelected((cur) => (cur === row.name ? null : row.name))
                     }

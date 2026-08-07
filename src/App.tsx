@@ -33,8 +33,11 @@ export default function App(): ReactElement {
     moodTimer.current = window.setTimeout(() => setMood("idle"), ms)
   }, [])
 
-  // по очереди: idle → happy → idle → surprised → idle → skeptical → …
+  // автоцикл лиц — только на WHOAMI (большой маскот). На остальных вкладках
+  // эмоция ставится один раз при входе и держится до следующей вкладки.
   useEffect(() => {
+    if (tab !== "whoami") return
+
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)")
     if (mq.matches) return
 
@@ -43,8 +46,8 @@ export default function App(): ReactElement {
     let timeout = 0
     let alive = true
 
-    const HOLD_MS = 7000 // сколько держать лицо
-    const IDLE_MS = 11000 // пауза на idle между сменами
+    const HOLD_MS = 7000
+    const IDLE_MS = 11000
     const FIRST_DELAY_MS = 8000
 
     const scheduleIdleThenNext = (delay: number): void => {
@@ -53,7 +56,6 @@ export default function App(): ReactElement {
         const next = SEQUENCE[idx % SEQUENCE.length]!
         idx += 1
         setMoodTemp(next, HOLD_MS)
-        // после удержания + небольшой запас на кроссфейд — снова idle-пауза
         scheduleIdleThenNext(HOLD_MS + 800 + IDLE_MS)
       }, delay)
     }
@@ -63,23 +65,32 @@ export default function App(): ReactElement {
       alive = false
       window.clearTimeout(timeout)
     }
-  }, [setMoodTemp])
+  }, [tab, setMoodTemp])
 
   const changeTab = useCallback(
     (id: TabId): void => {
       if (id !== tab) tabSfx()
       setTab(id)
-      // маскот реагирует на вкладку (стикер в углу)
+      // сбросить временный burst с WHOAMI — иначе через N ms вернёт idle
+      if (moodTimer.current !== null) {
+        window.clearTimeout(moodTimer.current)
+        moodTimer.current = null
+      }
+      // одна эмоция на вкладку — без таймера обратно в idle
       const TAB_MOOD: Partial<Record<TabId, Mood>> = {
         projects: "happy",
         stack: "idle",
         education: "skeptical",
         contact: "surprised",
       }
+      if (id === "whoami") {
+        setMood("idle")
+        return
+      }
       const m = TAB_MOOD[id]
-      if (m) setMoodTemp(m, 1500)
+      if (m) setMood(m)
     },
-    [tab, tabSfx, setMoodTemp],
+    [tab, tabSfx],
   )
 
   useEffect(() => {
@@ -139,7 +150,7 @@ export default function App(): ReactElement {
                     onNavigate={changeTab}
                   />
                 )}
-                {tab === "projects" && <Projects onMood={setMood} />}
+                {tab === "projects" && <Projects />}
                 {tab === "stack" && <Stack />}
                 {tab === "education" && <Education />}
                 {tab === "contact" && <Contact />}
