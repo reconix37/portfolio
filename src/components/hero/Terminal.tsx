@@ -1,13 +1,22 @@
-import { useEffect, useRef, useState, type ReactElement } from "react"
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type FormEvent,
+  type KeyboardEvent,
+  type ReactElement,
+} from "react"
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion"
+import { toggleDosTheme } from "@/hooks/useTheme"
 import { cn } from "@/lib/utils"
 
 type TermLine = {
   text: string
-  cls: "p" | "ok" | "c"
+  cls: "p" | "ok" | "c" | "err"
 }
 
-const LINES: TermLine[] = [
+const BOOT: TermLine[] = [
   { text: "$ whoami", cls: "p" },
   { text: "daniil.verkhovskyi — AI/ML engineer", cls: "ok" },
   { text: "$ echo $LOCATION", cls: "p" },
@@ -15,6 +24,7 @@ const LINES: TermLine[] = [
   { text: "$ cat focus.txt", cls: "p" },
   { text: "generative AI / structured output / evals", cls: "c" },
   { text: "$ ./greet.sh", cls: "p" },
+  { text: "type 'help' for commands", cls: "ok" },
 ]
 
 const LANGS = [
@@ -24,9 +34,29 @@ const LANGS = [
   { t: "Hello", l: "EN" },
 ] as const
 
+const HELP_LINES = [
+  "help          list commands",
+  "whoami        identity",
+  "projects      shipped modules",
+  "contact       email + github",
+  "stack         core toolkit",
+  "theme         toggle light/dark",
+  "clear         clear screen",
+  "sudo hire     nice try",
+  "cat secret.txt",
+]
+
+const SECRET_CAT = [
+  "  /\\_/\\",
+  " ( o.o )",
+  "  > ^ <",
+  "secret: hire the human, not the cat",
+]
+
 function lineClass(cls: TermLine["cls"]): string {
   if (cls === "p") return "text-muted"
   if (cls === "ok") return "text-[var(--term-ok)]"
+  if (cls === "err") return "text-[var(--term-accent)]"
   return "text-[var(--term-ink)]"
 }
 
@@ -39,7 +69,7 @@ function renderPromptLine(text: string, cls: TermLine["cls"]): ReactElement {
       </span>
     )
   }
-  return <span className={lineClass(cls)}>{text}</span>
+  return <span className={cn("whitespace-pre-wrap", lineClass(cls))}>{text}</span>
 }
 
 function LangRotator(): ReactElement {
@@ -65,20 +95,70 @@ function LangRotator(): ReactElement {
   )
 }
 
-function Cursor(): ReactElement {
-  return (
-    <span
-      className="ml-0.5 inline-block h-[15px] w-2 translate-y-px bg-[var(--term-accent)] align-[-2px] motion-safe:animate-blink"
-      aria-hidden="true"
-    />
-  )
+function runCommand(raw: string): TermLine[] {
+  const input = raw.trim()
+  if (!input) return []
+
+  const lower = input.toLowerCase()
+  const [cmd, ...rest] = lower.split(/\s+/)
+  const arg = rest.join(" ")
+
+  if (cmd === "help") {
+    return HELP_LINES.map((t) => ({ text: t, cls: "c" as const }))
+  }
+  if (cmd === "whoami") {
+    return [{ text: "daniil.verkhovskyi — AI/ML engineer", cls: "ok" }]
+  }
+  if (cmd === "projects") {
+    return [
+      { text: "[01] HabitForge — AI habit tracker", cls: "c" },
+      { text: "[02] AI Chat Platform — LLM chat for Telegram", cls: "c" },
+      { text: "[03] SLE Terminal — quant trading platform", cls: "c" },
+      { text: "[04] MSc Thesis — RAG assistant (in progress)", cls: "c" },
+    ]
+  }
+  if (cmd === "contact") {
+    return [
+      { text: "email   verchovskyidania@gmail.com", cls: "c" },
+      { text: "github  github.com/reconix37", cls: "c" },
+    ]
+  }
+  if (cmd === "stack") {
+    return [
+      { text: "gen ai / llm · python · fastapi · xgboost · react · supabase", cls: "c" },
+    ]
+  }
+  if (cmd === "theme") {
+    const next = toggleDosTheme()
+    return [{ text: `theme → ${next}`, cls: "ok" }]
+  }
+  if (cmd === "clear") {
+    return [{ text: "__CLEAR__", cls: "c" }]
+  }
+  if (cmd === "sudo" && arg === "hire") {
+    return [{ text: "nice try, send email instead", cls: "err" }]
+  }
+  if (cmd === "cat" && (arg === "secret.txt" || arg === "./secret.txt")) {
+    return SECRET_CAT.map((t) => ({ text: t, cls: "ok" as const }))
+  }
+
+  return [{ text: `command not found: ${input}. try 'help'`, cls: "err" }]
 }
 
 export function Terminal(): ReactElement {
   const reduced = usePrefersReducedMotion()
-  const [done, setDone] = useState<TermLine[]>([])
-  const [active, setActive] = useState<{ cls: TermLine["cls"]; shown: string } | null>(null)
-  const [finished, setFinished] = useState(false)
+  const [bootDone, setBootDone] = useState<TermLine[]>([])
+  const [bootActive, setBootActive] = useState<{ cls: TermLine["cls"]; shown: string } | null>(
+    null,
+  )
+  const [booted, setBooted] = useState(false)
+  const [lines, setLines] = useState<TermLine[]>([])
+  const [value, setValue] = useState("")
+  const [history, setHistory] = useState<string[]>([])
+  const histIdx = useRef<number>(-1)
+  const draft = useRef("")
+  const inputRef = useRef<HTMLInputElement>(null)
+  const bodyRef = useRef<HTMLDivElement>(null)
   const lineIdx = useRef(0)
   const charIdx = useRef(0)
   const timer = useRef<number | null>(null)
@@ -87,16 +167,15 @@ export function Terminal(): ReactElement {
     let cancelled = false
 
     if (reduced) {
-      setDone(LINES)
-      setActive(null)
-      setFinished(true)
+      setBootDone(BOOT)
+      setBootActive(null)
+      setBooted(true)
       return
     }
 
-    // StrictMode remount — сброс
-    setDone([])
-    setActive(null)
-    setFinished(false)
+    setBootDone([])
+    setBootActive(null)
+    setBooted(false)
     lineIdx.current = 0
     charIdx.current = 0
 
@@ -111,24 +190,20 @@ export function Terminal(): ReactElement {
 
     const typeNext = (): void => {
       if (cancelled) return
-
-      if (lineIdx.current >= LINES.length) {
-        setActive(null)
-        setFinished(true)
+      if (lineIdx.current >= BOOT.length) {
+        setBootActive(null)
+        setBooted(true)
         return
       }
-
-      const line = LINES[lineIdx.current]
-
+      const line = BOOT[lineIdx.current]
       if (charIdx.current < line.text.length) {
         charIdx.current += 1
-        setActive({ cls: line.cls, shown: line.text.slice(0, charIdx.current) })
+        setBootActive({ cls: line.cls, shown: line.text.slice(0, charIdx.current) })
         schedule(typeNext, 28 + Math.random() * 40)
         return
       }
-
-      setDone((prev) => [...prev, line])
-      setActive(null)
+      setBootDone((prev) => [...prev, line])
+      setBootActive(null)
       lineIdx.current += 1
       charIdx.current = 0
       schedule(typeNext, 260)
@@ -141,12 +216,77 @@ export function Terminal(): ReactElement {
     }
   }, [reduced])
 
+  useEffect(() => {
+    const el = bodyRef.current
+    if (!el) return
+    el.scrollTop = el.scrollHeight
+  }, [bootDone, bootActive, lines, booted])
+
+  const focusInput = useCallback((): void => {
+    inputRef.current?.focus()
+  }, [])
+
+  const submit = useCallback(
+    (raw: string): void => {
+      const trimmed = raw.trimEnd()
+      const echo: TermLine = { text: `$ ${trimmed}`, cls: "p" }
+      if (!trimmed) {
+        setLines((prev) => [...prev, echo])
+        return
+      }
+
+      const out = runCommand(trimmed)
+      if (out.length === 1 && out[0].text === "__CLEAR__") {
+        setLines([])
+        setHistory((h) => [...h, trimmed])
+        histIdx.current = -1
+        return
+      }
+
+      setLines((prev) => [...prev, echo, ...out])
+      setHistory((h) => [...h, trimmed])
+      histIdx.current = -1
+    },
+    [],
+  )
+
+  const onSubmit = (e: FormEvent): void => {
+    e.preventDefault()
+    submit(value)
+    setValue("")
+    draft.current = ""
+  }
+
+  const onKeyDown = (e: KeyboardEvent<HTMLInputElement>): void => {
+    if (e.key === "ArrowUp") {
+      e.preventDefault()
+      if (!history.length) return
+      if (histIdx.current === -1) draft.current = value
+      const next = histIdx.current === -1 ? history.length - 1 : Math.max(0, histIdx.current - 1)
+      histIdx.current = next
+      setValue(history[next] ?? "")
+      return
+    }
+    if (e.key === "ArrowDown") {
+      e.preventDefault()
+      if (histIdx.current === -1) return
+      if (histIdx.current >= history.length - 1) {
+        histIdx.current = -1
+        setValue(draft.current)
+        return
+      }
+      const next = histIdx.current + 1
+      histIdx.current = next
+      setValue(history[next] ?? "")
+    }
+  }
+
   return (
     <div
       className="border-2 border-line bg-[var(--term-bg)] text-[13.5px] leading-[1.7] text-[var(--term-ink)] shadow-[var(--shadow)]"
-      role="log"
+      role="application"
       aria-label="system terminal"
-      aria-live="polite"
+      onClick={focusInput}
     >
       <div className="flex items-center gap-2 border-b-2 border-line bg-surface-2 px-3.5 py-2.5 dark:bg-[#26231F]">
         <i className="size-2.5 border-2 border-line bg-accent" aria-hidden="true" />
@@ -157,26 +297,60 @@ export function Terminal(): ReactElement {
         </span>
       </div>
 
-      <div className="min-h-[210px] px-5 py-[18px]">
-        {done.map((line, i) => (
-          <div key={`${i}-${line.text}`} className="break-words whitespace-pre-wrap">
+      <div
+        ref={bodyRef}
+        className="max-h-[320px] min-h-[210px] overflow-y-auto px-5 py-[18px]"
+        aria-live="polite"
+      >
+        {bootDone.map((line, i) => (
+          <div key={`b-${i}-${line.text}`} className="break-words whitespace-pre-wrap">
             {renderPromptLine(line.text, line.cls)}
           </div>
         ))}
 
-        {active && (
+        {bootActive && (
           <div className="break-words whitespace-pre-wrap">
-            {renderPromptLine(active.shown, active.cls)}
-            <Cursor />
+            {renderPromptLine(bootActive.shown, bootActive.cls)}
+            <span
+              className="ml-0.5 inline-block h-[15px] w-2 translate-y-px bg-[var(--term-accent)] align-[-2px] motion-safe:animate-blink"
+              aria-hidden="true"
+            />
           </div>
         )}
 
-        {finished && (
+        {booted && bootDone.length > 0 && (
           <div className="break-words whitespace-pre-wrap">
-            <span className="text-muted">$ </span>
+            <span className="text-muted"># greet: </span>
             <LangRotator />
-            <Cursor />
           </div>
+        )}
+
+        {lines.map((line, i) => (
+          <div key={`l-${i}-${line.text}`} className="break-words whitespace-pre-wrap">
+            {renderPromptLine(line.text, line.cls)}
+          </div>
+        ))}
+
+        {booted && (
+          <form onSubmit={onSubmit} className="flex items-center gap-0">
+            <span className="font-bold text-[var(--term-accent)]" aria-hidden="true">
+              $
+            </span>
+            <span className="text-muted" aria-hidden="true">
+              &nbsp;
+            </span>
+            <input
+              ref={inputRef}
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              onKeyDown={onKeyDown}
+              spellCheck={false}
+              autoComplete="off"
+              autoCapitalize="off"
+              aria-label="terminal command"
+              className="min-w-0 flex-1 border-0 bg-transparent p-0 font-mono text-[13.5px] text-[var(--term-ink)] caret-[var(--term-accent)] outline-none"
+            />
+          </form>
         )}
       </div>
     </div>
