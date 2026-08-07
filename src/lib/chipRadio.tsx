@@ -23,34 +23,63 @@ export type TrackId =
 export type Track = {
   id: TrackId
   name: string
+  src: string
   bpm: number
   vibe: "chip" | "lofi"
 }
 
+/** Реальные mp3 (Jamendo CC) в public/music/ — id оставлены для совместимости UI. */
 export const TRACKS: Track[] = [
-  { id: "night-shift", name: "night-shift", bpm: 112, vibe: "chip" },
-  { id: "deploy", name: "deploy", bpm: 118, vibe: "chip" },
-  { id: "coffee-loop", name: "coffee-loop", bpm: 110, vibe: "chip" },
-  { id: "push-to-prod", name: "push-to-prod", bpm: 120, vibe: "chip" },
-  { id: "rainy-commit", name: "rainy-commit", bpm: 88, vibe: "lofi" },
-  { id: "soft-reboot", name: "soft-reboot", bpm: 92, vibe: "lofi" },
-  { id: "late-pr", name: "late-pr", bpm: 96, vibe: "lofi" },
+  {
+    id: "night-shift",
+    name: "lofi-memories-children",
+    src: "/music/lofi-memories-children.mp3",
+    bpm: 112,
+    vibe: "chip",
+  },
+  {
+    id: "deploy",
+    name: "dark-lofi-vibes",
+    src: "/music/dark-lofi-vibes.mp3",
+    bpm: 118,
+    vibe: "chip",
+  },
+  {
+    id: "coffee-loop",
+    name: "midnight-lofi-love",
+    src: "/music/midnight-lofi-love.mp3",
+    bpm: 110,
+    vibe: "chip",
+  },
+  {
+    id: "push-to-prod",
+    name: "happy-lofi",
+    src: "/music/happy-lofi.mp3",
+    bpm: 120,
+    vibe: "chip",
+  },
+  {
+    id: "rainy-commit",
+    name: "background-lofi-lifestyle",
+    src: "/music/background-lofi-lifestyle.mp3",
+    bpm: 88,
+    vibe: "lofi",
+  },
+  {
+    id: "soft-reboot",
+    name: "love-lofi-2",
+    src: "/music/love-lofi-2.mp3",
+    bpm: 92,
+    vibe: "lofi",
+  },
+  {
+    id: "late-pr",
+    name: "hiphop-lofi-dance",
+    src: "/music/hiphop-lofi-dance.mp3",
+    bpm: 96,
+    vibe: "lofi",
+  },
 ]
-
-/** Паттерны: -1 = rest. Lofi — реже ноты, ниже регистр. */
-const MELODIES: Record<TrackId, number[]> = {
-  "night-shift": [48, 55, 60, 55, 48, 52, 55, 60, 48, 55, 63, 55, 48, 52, 60, 55],
-  deploy: [36, 36, 43, 36, 48, 43, 36, 43, 36, 36, 48, 43, 55, 48, 43, 36],
-  "coffee-loop": [52, 55, 59, 55, 52, 48, 55, 59, 52, 55, 60, 55, 48, 52, 55, 59],
-  "push-to-prod": [60, 60, -1, 67, 60, -1, 67, 72, 60, 60, -1, 67, 55, 60, 67, 72],
-  "rainy-commit": [48, -1, 52, -1, 55, -1, 52, -1, 48, -1, 50, -1, 52, -1, 55, -1],
-  "soft-reboot": [43, -1, -1, 48, -1, -1, 50, -1, 43, -1, 48, -1, 55, -1, 52, -1],
-  "late-pr": [55, -1, 52, 48, -1, 52, -1, 55, 60, -1, 55, -1, 52, -1, 48, -1],
-}
-
-function midiToFreq(midi: number): number {
-  return 440 * Math.pow(2, (midi - 69) / 12)
-}
 
 export type PlaylistId = "all" | "chip" | "lofi"
 
@@ -63,9 +92,7 @@ type ChipRadioApi = {
   volume: number
   eq: number[]
   playlist: PlaylistId
-  /** секунды в текущем лупе */
   elapsed: number
-  /** длина лупа в секундах */
   duration: number
   setVolume: (v: number) => void
   setPlaylist: (id: PlaylistId) => void
@@ -76,13 +103,13 @@ type ChipRadioApi = {
   stop: () => void
 }
 
-function loopDuration(track: Track): number {
-  return (MELODIES[track.id].length * 60) / (track.bpm * 4)
-}
-
 function filterTracks(playlist: PlaylistId): Track[] {
   if (playlist === "all") return TRACKS
   return TRACKS.filter((t) => t.vibe === playlist)
+}
+
+function resolveSrc(src: string): string {
+  return new URL(src, window.location.origin).href
 }
 
 const ChipRadioContext = createContext<ChipRadioApi | null>(null)
@@ -95,115 +122,48 @@ export function ChipRadioProvider({ children }: { children: ReactNode }): ReactE
   const [volume, setVolume] = useState(0.32)
   const [eq, setEq] = useState([0.3, 0.5, 0.4, 0.6, 0.35])
   const [elapsed, setElapsed] = useState(0)
+  const [duration, setDuration] = useState(0)
 
-  const ctxRef = useRef<AudioContext | null>(null)
-  const masterRef = useRef<GainNode | null>(null)
-  const timerRef = useRef<number | null>(null)
-  const stepRef = useRef(0)
+  const audioRef = useRef<HTMLAudioElement | null>(null)
+  const eqTimerRef = useRef<number | null>(null)
   const playingRef = useRef(false)
   const trackIdxRef = useRef(0)
   const playlistRef = useRef<PlaylistId>(playlist)
   const volumeRef = useRef(volume)
   const reducedRef = useRef(reduced)
+  const nextTrackRef = useRef<() => void>(() => undefined)
 
   const tracks = useMemo(() => filterTracks(playlist), [playlist])
-  const track = tracks[Math.min(trackIdx, tracks.length - 1)] ?? TRACKS[0]
-  const duration = loopDuration(track)
+  const safeIdx = Math.min(trackIdx, Math.max(0, tracks.length - 1))
+  const track = tracks[safeIdx] ?? TRACKS[0]
 
-  volumeRef.current = volume
-  trackIdxRef.current = Math.min(trackIdx, tracks.length - 1)
+  trackIdxRef.current = safeIdx
   playlistRef.current = playlist
+  volumeRef.current = volume
   playingRef.current = playing
   reducedRef.current = reduced
 
-  const stop = useCallback((): void => {
-    if (timerRef.current !== null) {
-      window.clearInterval(timerRef.current)
-      timerRef.current = null
+  const ensureAudio = useCallback((): HTMLAudioElement => {
+    if (!audioRef.current) {
+      const audio = new Audio()
+      audio.preload = "metadata"
+      audioRef.current = audio
     }
-    playingRef.current = false
-    setPlaying(false)
-    setElapsed(0)
+    return audioRef.current
+  }, [])
+
+  const stopEq = useCallback((): void => {
+    if (eqTimerRef.current !== null) {
+      window.clearInterval(eqTimerRef.current)
+      eqTimerRef.current = null
+    }
     setEq([0.2, 0.2, 0.2, 0.2, 0.2])
   }, [])
 
-  const ensureCtx = useCallback((): AudioContext => {
-    if (!ctxRef.current) {
-      const Ctx =
-        window.AudioContext ||
-        (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext
-      ctxRef.current = new Ctx()
-      const master = ctxRef.current.createGain()
-      master.gain.value = volumeRef.current
-      master.connect(ctxRef.current.destination)
-      masterRef.current = master
-    }
-    return ctxRef.current
-  }, [])
-
-  const beep = useCallback(
-    (freq: number, dur: number, type: OscillatorType, peak = 0.18): void => {
-      const ctx = ctxRef.current
-      const master = masterRef.current
-      if (!ctx || !master) return
-      const now = ctx.currentTime
-      const osc = ctx.createOscillator()
-      const gain = ctx.createGain()
-      osc.type = type
-      osc.frequency.value = freq
-      gain.gain.setValueAtTime(0.0001, now)
-      gain.gain.exponentialRampToValueAtTime(peak, now + 0.02)
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + dur)
-      osc.connect(gain)
-      gain.connect(master)
-      osc.start(now)
-      osc.stop(now + dur + 0.02)
-    },
-    [],
-  )
-
-  const noiseHit = useCallback((dur: number, amp = 0.08): void => {
-    const ctx = ctxRef.current
-    const master = masterRef.current
-    if (!ctx || !master) return
-    const len = Math.floor(ctx.sampleRate * dur)
-    const buf = ctx.createBuffer(1, len, ctx.sampleRate)
-    const data = buf.getChannelData(0)
-    for (let i = 0; i < len; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / len)
-    const src = ctx.createBufferSource()
-    const gain = ctx.createGain()
-    src.buffer = buf
-    gain.gain.value = amp
-    src.connect(gain)
-    gain.connect(master)
-    src.start()
-  }, [])
-
-  const tick = useCallback((): void => {
-    const list = filterTracks(playlistRef.current)
-    const cur = list[trackIdxRef.current] ?? TRACKS[0]
-    const melody = MELODIES[cur.id]
-    const step = stepRef.current % melody.length
-    const note = melody[step]
-    const sixteenth = 60 / cur.bpm / 4
-    const lofi = cur.vibe === "lofi"
-
-    if (note >= 0) {
-      const wave: OscillatorType = lofi
-        ? "triangle"
-        : cur.id === "deploy"
-          ? "square"
-          : "triangle"
-      beep(midiToFreq(note), sixteenth * (lofi ? 1.4 : 0.85), wave, lofi ? 0.1 : 0.18)
-    }
-    if (!lofi && step % 4 === 0) noiseHit(0.04)
-    if (lofi && step % 8 === 0) noiseHit(0.06, 0.035)
-    if (!lofi && step % 8 === 4) beep(midiToFreq(36), sixteenth * 0.5, "square", 0.12)
-
-    stepRef.current = step + 1
-    setElapsed((stepRef.current * sixteenth) % loopDuration(cur))
-
-    if (!reducedRef.current) {
+  const startEq = useCallback((): void => {
+    if (eqTimerRef.current !== null) return
+    if (reducedRef.current) return
+    eqTimerRef.current = window.setInterval(() => {
       setEq([
         0.2 + Math.random() * 0.8,
         0.2 + Math.random() * 0.8,
@@ -211,41 +171,123 @@ export function ChipRadioProvider({ children }: { children: ReactNode }): ReactE
         0.2 + Math.random() * 0.8,
         0.2 + Math.random() * 0.8,
       ])
-    }
-  }, [beep, noiseHit])
+    }, 120)
+  }, [])
 
-  const startEngine = useCallback(async (): Promise<void> => {
-    const ctx = ensureCtx()
-    if (ctx.state === "suspended") await ctx.resume()
-    if (timerRef.current !== null) window.clearInterval(timerRef.current)
+  const bindSrc = useCallback(
+    (t: Track): HTMLAudioElement => {
+      const audio = ensureAudio()
+      const abs = resolveSrc(t.src)
+      if (audio.src !== abs) {
+        audio.src = t.src
+        audio.preload = "metadata"
+      }
+      audio.volume = volumeRef.current
+      return audio
+    },
+    [ensureAudio],
+  )
+
+  const playCurrent = useCallback(async (): Promise<void> => {
     const list = filterTracks(playlistRef.current)
     const cur = list[trackIdxRef.current] ?? TRACKS[0]
-    const intervalMs = (60 / cur.bpm / 4) * 1000
-    stepRef.current = 0
+    const audio = bindSrc(cur)
+    try {
+      await audio.play()
+      playingRef.current = true
+      setPlaying(true)
+      startEq()
+    } catch {
+      playingRef.current = false
+      setPlaying(false)
+      stopEq()
+    }
+  }, [bindSrc, startEq, stopEq])
+
+  const stop = useCallback((): void => {
+    const audio = audioRef.current
+    playingRef.current = false
+    setPlaying(false)
+    if (audio) {
+      audio.pause()
+      audio.currentTime = 0
+    }
     setElapsed(0)
-    playingRef.current = true
-    setPlaying(true)
-    tick()
-    timerRef.current = window.setInterval(tick, intervalMs)
-  }, [ensureCtx, tick])
+    stopEq()
+  }, [stopEq])
 
   useEffect(() => {
-    if (masterRef.current) masterRef.current.gain.value = volume
+    const audio = ensureAudio()
+
+    const onTime = (): void => setElapsed(audio.currentTime || 0)
+    const onMeta = (): void => {
+      setDuration(Number.isFinite(audio.duration) ? audio.duration : 0)
+    }
+    const onEnded = (): void => nextTrackRef.current()
+    const onPlay = (): void => {
+      playingRef.current = true
+      setPlaying(true)
+      startEq()
+    }
+    const onPause = (): void => {
+      // stop() уже выставил playingRef=false до pause
+      if (!playingRef.current) {
+        stopEq()
+        return
+      }
+      playingRef.current = false
+      setPlaying(false)
+      stopEq()
+    }
+
+    audio.addEventListener("timeupdate", onTime)
+    audio.addEventListener("loadedmetadata", onMeta)
+    audio.addEventListener("durationchange", onMeta)
+    audio.addEventListener("ended", onEnded)
+    audio.addEventListener("play", onPlay)
+    audio.addEventListener("pause", onPause)
+
+    return () => {
+      audio.removeEventListener("timeupdate", onTime)
+      audio.removeEventListener("loadedmetadata", onMeta)
+      audio.removeEventListener("durationchange", onMeta)
+      audio.removeEventListener("ended", onEnded)
+      audio.removeEventListener("play", onPlay)
+      audio.removeEventListener("pause", onPause)
+      audio.pause()
+      audio.removeAttribute("src")
+      audio.load()
+      stopEq()
+      audioRef.current = null
+    }
+  }, [ensureAudio, startEq, stopEq])
+
+  useEffect(() => {
+    if (audioRef.current) audioRef.current.volume = volume
   }, [volume])
 
+  // подгрузить metadata текущего трека (без автоплея)
   useEffect(() => {
-    return () => {
-      stop()
-      void ctxRef.current?.close()
-      ctxRef.current = null
-      masterRef.current = null
+    const audio = bindSrc(track)
+    setElapsed(0)
+    if (Number.isFinite(audio.duration) && audio.duration > 0) {
+      setDuration(audio.duration)
+    } else {
+      setDuration(0)
     }
-  }, [stop])
+  }, [track.id, bindSrc])
 
   const togglePlay = useCallback((): void => {
-    if (playingRef.current) stop()
-    else void startEngine()
-  }, [startEngine, stop])
+    const audio = ensureAudio()
+    if (playingRef.current) {
+      playingRef.current = false
+      setPlaying(false)
+      audio.pause()
+      stopEq()
+    } else {
+      void playCurrent()
+    }
+  }, [ensureAudio, playCurrent, stopEq])
 
   const playTrack = useCallback(
     (idx: number): void => {
@@ -253,10 +295,10 @@ export function ChipRadioProvider({ children }: { children: ReactNode }): ReactE
       const safe = ((idx % list.length) + list.length) % list.length
       setTrackIdx(safe)
       trackIdxRef.current = safe
-      stop()
-      window.setTimeout(() => void startEngine(), 30)
+      setElapsed(0)
+      void playCurrent()
     },
-    [startEngine, stop],
+    [playCurrent],
   )
 
   const nextTrack = useCallback((): void => {
@@ -269,27 +311,30 @@ export function ChipRadioProvider({ children }: { children: ReactNode }): ReactE
     playTrack((trackIdxRef.current - 1 + list.length) % list.length)
   }, [playTrack])
 
+  nextTrackRef.current = nextTrack
+
   const setPlaylist = useCallback(
     (id: PlaylistId): void => {
+      const wasPlaying = playingRef.current
       setPlaylistState(id)
       playlistRef.current = id
       setTrackIdx(0)
       trackIdxRef.current = 0
-      if (playingRef.current) {
-        stop()
-        window.setTimeout(() => void startEngine(), 30)
-      } else {
-        setElapsed(0)
+      setElapsed(0)
+      if (wasPlaying) void playCurrent()
+      else {
+        const list = filterTracks(id)
+        bindSrc(list[0] ?? TRACKS[0])
       }
     },
-    [startEngine, stop],
+    [bindSrc, playCurrent],
   )
 
   const value = useMemo<ChipRadioApi>(
     () => ({
       tracks,
       allTracks: TRACKS,
-      trackIdx: Math.min(trackIdx, tracks.length - 1),
+      trackIdx: safeIdx,
       track,
       playing,
       volume,
@@ -307,7 +352,7 @@ export function ChipRadioProvider({ children }: { children: ReactNode }): ReactE
     }),
     [
       tracks,
-      trackIdx,
+      safeIdx,
       track,
       playing,
       volume,
