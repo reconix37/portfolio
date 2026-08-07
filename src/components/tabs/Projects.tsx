@@ -96,8 +96,11 @@ export function Projects({ onMood }: ProjectsProps): ReactElement {
           SHIPPED MODULES
           <SectionBadge text="// 4 items" />
         </h2>
-        <p className="mb-6 font-mono text-sm text-muted">
+        <p className="mb-2 font-mono text-sm text-muted">
           {"// real products, real numbers — filter and sort"}
+        </p>
+        <p className="handwrite mb-6 text-accent" aria-hidden="true">
+          ↗ hover a row — mascot reacts
         </p>
 
         <div className="mb-5 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">

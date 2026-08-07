@@ -165,6 +165,7 @@
   --animate-bandmove: bandmove 28s linear infinite;
   --animate-mascot-bob: mascot-bob 3.5s ease-in-out infinite;
   --animate-mascot-jump: mascot-jump 0.4s ease-out;
+  --animate-tickermove: tickermove 42s linear infinite;
 }
 
 @keyframes blink {
@@ -190,6 +191,11 @@
   0% { transform: translateY(0); }
   40% { transform: translateY(-12px); }
   100% { transform: translateY(0); }
+}
+
+@keyframes tickermove {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(var(--ticker-shift, -50%), 0, 0); }
 }
 
 @layer base {
@@ -261,6 +267,15 @@
   .reveal-d1 { transition-delay: 0.07s; }
   .reveal-d2 { transition-delay: 0.14s; }
   .reveal-d3 { transition-delay: 0.21s; }
+
+  /* handwritten callout — Space Mono + наклон, без нового шрифта */
+  .handwrite {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-style: italic;
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

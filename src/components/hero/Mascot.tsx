@@ -22,18 +22,22 @@ const SPRITES: Record<Mood, string> = {
   skeptical: "/mascot/mascot-skeptical.png",
 }
 
-const SPRITE_URLS = Object.values(SPRITES)
+const MOODS: Mood[] = ["idle", "happy", "surprised", "skeptical"]
 
 interface MascotProps {
   mood?: Mood
   className?: string
   size?: number
-  /** внешний клик уже обработан родителем — тогда без внутреннего jump */
   interactive?: boolean
   onMoodBurst?: (mood: Mood) => void
 }
 
-/** Pixel anime-tan. Размер задаёт родитель (hero ≠ float), без remount на mood. */
+/**
+ * Anime-tan. Все спрайты в стеке — кроссфейд opacity, без смены src
+ * (иначе flash + «прыжок» реквизита между кадрами).
+ * Blink через happy ОТКЛЮЧЁН: idle и happy — разные генерации (стикеры/кружка),
+ * свап выглядит как смена всей картинки, а не моргание.
+ */
 export function Mascot({
   mood = "idle",
   className,
@@ -44,55 +48,41 @@ export function Mascot({
   const reduced = usePrefersReducedMotion()
   const [displayMood, setDisplayMood] = useState<Mood>(mood)
   const [jumping, setJumping] = useState(false)
-  const blinkTimer = useRef<number | null>(null)
-  const burstTimer = useRef<number | null>(null)
+  const locked = useRef(false)
+  const jumpTimer = useRef<number | null>(null)
 
+  // прелоад
   useEffect(() => {
-    for (const url of SPRITE_URLS) {
+    for (const url of Object.values(SPRITES)) {
       const img = new Image()
       img.src = url
     }
   }, [])
 
-  // синхронизация mood снаружи (кроме активного blink/burst)
+  // внешний mood — не перебивать jump-лок
   useEffect(() => {
+    if (locked.current) return
     setDisplayMood(mood)
   }, [mood])
 
-  // idle-моргание: каждые 3–5с → happy на 150–200ms
   useEffect(() => {
-    if (reduced) return
-
-    const schedule = (): void => {
-      const wait = 3000 + Math.random() * 2000
-      blinkTimer.current = window.setTimeout(() => {
-        if (mood !== "idle") {
-          schedule()
-          return
-        }
-        setDisplayMood("happy")
-        burstTimer.current = window.setTimeout(() => {
-          setDisplayMood(mood)
-          schedule()
-        }, 150 + Math.random() * 50)
-      }, wait)
-    }
-
-    schedule()
     return () => {
-      if (blinkTimer.current !== null) window.clearTimeout(blinkTimer.current)
-      if (burstTimer.current !== null) window.clearTimeout(burstTimer.current)
+      if (jumpTimer.current !== null) window.clearTimeout(jumpTimer.current)
     }
-  }, [mood, reduced])
+  }, [])
 
   const onClick = useCallback((): void => {
     if (!interactive) return
     onMoodBurst?.("surprised")
     if (reduced) return
+
+    locked.current = true
     setJumping(true)
     setDisplayMood("surprised")
-    window.setTimeout(() => {
+    if (jumpTimer.current !== null) window.clearTimeout(jumpTimer.current)
+    jumpTimer.current = window.setTimeout(() => {
       setJumping(false)
+      locked.current = false
       setDisplayMood(mood)
     }, 400)
   }, [interactive, mood, onMoodBurst, reduced])
@@ -100,7 +90,7 @@ export function Mascot({
   return (
     <div
       className={cn(
-        "relative shrink-0 overflow-hidden",
+        "relative shrink-0",
         !reduced && !jumping && "motion-safe:animate-mascot-bob",
         jumping && "motion-safe:animate-mascot-jump",
         interactive && "cursor-pointer",
@@ -108,7 +98,7 @@ export function Mascot({
       )}
       style={{ width: size, height: size }}
       role="img"
-      aria-label={`DANIIL OS mascot — ${mood}`}
+      aria-label={`DANIIL OS mascot — ${displayMood}`}
       onClick={interactive ? onClick : undefined}
       onKeyDown={
         interactive
@@ -122,28 +112,30 @@ export function Mascot({
       }
       tabIndex={interactive ? 0 : undefined}
     >
-      <img
-        src={SPRITES[displayMood]}
-        alt=""
-        width={size}
-        height={size}
-        draggable={false}
-        className="pointer-events-none block size-full max-w-none object-contain transition-opacity duration-150"
-        style={{ imageRendering: "pixelated" }}
-      />
+      {MOODS.map((m) => (
+        <img
+          key={m}
+          src={SPRITES[m]}
+          alt=""
+          width={size}
+          height={size}
+          draggable={false}
+          className={cn(
+            "pointer-events-none absolute inset-0 size-full max-w-none object-contain transition-opacity duration-200 ease-out",
+            displayMood === m ? "opacity-100" : "opacity-0",
+          )}
+        />
+      ))}
     </div>
   )
 }
 
 interface FloatingMascotProps {
   mood: Mood
-  /** пока hero в viewport — floating скрыт */
   hideWhenVisibleRef: RefObject<HTMLElement | null>
-  /** принудительно показать (напр. на других вкладках) */
   forceShow?: boolean
 }
 
-/** Fixed overlay в углу — заведомо меньше hero, без мигания на пороге. */
 export function FloatingMascot({
   mood,
   hideWhenVisibleRef,
