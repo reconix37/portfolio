@@ -5,6 +5,8 @@ import { Band } from "@/components/Band"
 import { SectionLabel } from "@/components/SectionLabel"
 import { HandCallout } from "@/components/HandCallout"
 import { RadioDock } from "@/components/RadioDock"
+import { QuoteBlock } from "@/components/QuoteBlock"
+import type { TabId } from "@/components/TabBar"
 import { cn } from "@/lib/utils"
 
 const STATS = [
@@ -17,11 +19,12 @@ const STATS = [
 interface WhoamiProps {
   mood?: Mood
   onMood?: (mood: Mood) => void
+  onNavigate?: (id: TabId) => void
 }
 
-/** WHOAMI — композиция как у deploychan: текст слева, полароид справа, терминал ниже. */
+/** WHOAMI — текст слева, полароид справа; callouts только в потоке. */
 export const Whoami = forwardRef<HTMLElement, WhoamiProps>(function Whoami(
-  { mood = "idle", onMood },
+  { mood = "idle", onMood, onNavigate },
   ref,
 ): ReactElement {
   return (
@@ -54,14 +57,32 @@ export const Whoami = forwardRef<HTMLElement, WhoamiProps>(function Whoami(
               that catch regressions before users do.
             </p>
 
-            <p className="mb-3 font-mono text-xs tracking-[0.06em] text-muted">
+            <p className="mb-5 font-mono text-xs tracking-[0.06em] text-muted">
               {">> 4 products shipped · 0 slideware"}
             </p>
-            <HandCallout rotate={-3}>type help in the terminal below</HandCallout>
+
+            {onNavigate && (
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() => onNavigate("projects")}
+                  className="min-h-11 border-2 border-line bg-accent px-4 py-2 font-mono text-xs tracking-[0.1em] text-bg uppercase shadow-[3px_3px_0_var(--line)] transition-[box-shadow,transform] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0_var(--line)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent dark:text-[#121110]"
+                >
+                  projects →
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onNavigate("contact")}
+                  className="min-h-11 border-2 border-line bg-ink px-4 py-2 font-mono text-xs tracking-[0.1em] text-bg uppercase shadow-[3px_3px_0_var(--line)] transition-[box-shadow,transform] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0_var(--line)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent dark:bg-[#E8E4DC] dark:text-[#121110]"
+                >
+                  contact
+                </button>
+              </div>
+            )}
           </div>
 
           <div className="relative mx-auto w-fit shrink-0 lg:mx-0 lg:mt-1">
-            <div className="rotate-[4deg] border-2 border-line bg-bg p-3 pb-9 shadow-[6px_6px_0_var(--line)] transition-transform hover:rotate-[2deg]">
+            <div className="relative rotate-[4deg] border-2 border-line bg-bg p-3 pb-8 shadow-[6px_6px_0_var(--line)] transition-transform hover:rotate-[2deg]">
               <div className="relative border-2 border-line bg-accent-2">
                 <Mascot
                   mood={mood}
@@ -74,21 +95,23 @@ export const Whoami = forwardRef<HTMLElement, WhoamiProps>(function Whoami(
                 </span>
               </div>
             </div>
-            <HandCallout
-              rotate={8}
-              className="absolute -right-2 -bottom-3 md:-right-14"
-            >
-              site mascot
-            </HandCallout>
-            <span className="absolute top-8 -left-5 hidden rotate-[-12deg] border-2 border-line bg-bg px-2 py-1 font-mono text-[10px] tracking-[0.12em] text-ink uppercase shadow-[3px_3px_0_var(--line)] sm:inline-block">
+
+            <span className="absolute top-8 -left-5 z-[1] hidden rotate-[-12deg] border-2 border-line bg-bg px-2 py-1 font-mono text-[10px] tracking-[0.12em] text-ink uppercase shadow-[3px_3px_0_var(--line)] sm:inline-block">
               HABITFORGE
             </span>
-            <span className="absolute top-[42%] -right-7 hidden rotate-[9deg] border-2 border-line bg-surface px-2 py-1 font-mono text-[10px] tracking-[0.12em] text-ink uppercase shadow-[3px_3px_0_var(--line)] sm:inline-block">
+            <span className="absolute top-[42%] -right-7 z-[1] hidden rotate-[9deg] border-2 border-line bg-surface px-2 py-1 font-mono text-[10px] tracking-[0.12em] text-ink uppercase shadow-[3px_3px_0_var(--line)] sm:inline-block">
               RAG
             </span>
-            <span className="absolute bottom-20 left-0 hidden rotate-[-6deg] border-2 border-line bg-bg px-2 py-1 font-mono text-[10px] tracking-[0.12em] text-accent uppercase shadow-[3px_3px_0_var(--line)] sm:inline-block">
+            <span className="absolute top-[58%] -left-3 z-[1] hidden rotate-[-6deg] border-2 border-line bg-bg px-2 py-1 font-mono text-[10px] tracking-[0.12em] text-accent uppercase shadow-[3px_3px_0_var(--line)] sm:inline-block">
               EVALS
             </span>
+
+            {/* в потоке под полароидом — не absolute поверх рамки */}
+            <div className="mt-5 pl-1">
+              <HandCallout point="ne" rotate={-3}>
+                site mascot
+              </HandCallout>
+            </div>
           </div>
         </div>
 
@@ -111,15 +134,20 @@ export const Whoami = forwardRef<HTMLElement, WhoamiProps>(function Whoami(
           ))}
         </div>
 
-        {/* радио в потоке — как MOCP у KISA, не floating */}
-        <div className="mb-8">
-          <HandCallout rotate={-2} className="mb-3">
-            chipradio · close anytime
-          </HandCallout>
-          <RadioDock />
+        <div className="mb-8 grid gap-4 lg:grid-cols-2">
+          <QuoteBlock />
+          <div>
+            <HandCallout point="se" rotate={-2} className="mb-3">
+              chipradio · close anytime
+            </HandCallout>
+            <RadioDock />
+          </div>
         </div>
 
         <div className="mb-2">
+          <HandCallout point="se" rotate={-2} className="mb-3">
+            type help in the terminal
+          </HandCallout>
           <Terminal />
         </div>
       </div>

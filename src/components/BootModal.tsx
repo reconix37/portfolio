@@ -1,5 +1,6 @@
 import { useEffect, useState, type ReactElement } from "react"
 import { cn } from "@/lib/utils"
+import { useSfx } from "@/hooks/useSfx"
 
 const BOOT_KEY = "daniil-os-booted"
 const LINES = [
@@ -20,6 +21,7 @@ interface BootModalProps {
 export function BootModal({ onDone }: BootModalProps): ReactElement | null {
   const [open, setOpen] = useState(false)
   const [visible, setVisible] = useState(0)
+  const { boot } = useSfx()
 
   useEffect(() => {
     try {
@@ -46,6 +48,7 @@ export function BootModal({ onDone }: BootModalProps): ReactElement | null {
     } catch {
       /* ignore */
     }
+    boot()
     setOpen(false)
     onDone()
   }

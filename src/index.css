@@ -271,10 +271,10 @@
   /* handwritten callout — крупнее, заметнее, как у KISA */
   .handwrite {
     font-family: var(--font-mono);
-    font-size: clamp(15px, 1.6vw, 18px);
+    font-size: clamp(16px, 1.7vw, 20px);
     font-style: italic;
     font-weight: 700;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.02em;
     line-height: 1.25;
   }
 }

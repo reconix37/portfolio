@@ -52,28 +52,49 @@ function midiToFreq(midi: number): number {
   return 440 * Math.pow(2, (midi - 69) / 12)
 }
 
+export type PlaylistId = "all" | "chip" | "lofi"
+
 type ChipRadioApi = {
   tracks: Track[]
+  allTracks: Track[]
   trackIdx: number
   track: Track
   playing: boolean
   volume: number
   eq: number[]
+  playlist: PlaylistId
+  /** секунды в текущем лупе */
+  elapsed: number
+  /** длина лупа в секундах */
+  duration: number
   setVolume: (v: number) => void
+  setPlaylist: (id: PlaylistId) => void
   togglePlay: () => void
   nextTrack: () => void
+  prevTrack: () => void
   playTrack: (idx: number) => void
   stop: () => void
+}
+
+function loopDuration(track: Track): number {
+  return (MELODIES[track.id].length * 60) / (track.bpm * 4)
+}
+
+function filterTracks(playlist: PlaylistId): Track[] {
+  if (playlist === "all") return TRACKS
+  return TRACKS.filter((t) => t.vibe === playlist)
 }
 
 const ChipRadioContext = createContext<ChipRadioApi | null>(null)
 
 export function ChipRadioProvider({ children }: { children: ReactNode }): ReactElement {
   const reduced = usePrefersReducedMotion()
+  const [playlist, setPlaylistState] = useState<PlaylistId>("all")
   const [trackIdx, setTrackIdx] = useState(0)
   const [playing, setPlaying] = useState(false)
   const [volume, setVolume] = useState(0.32)
   const [eq, setEq] = useState([0.3, 0.5, 0.4, 0.6, 0.35])
+  const [elapsed, setElapsed] = useState(0)
 
   const ctxRef = useRef<AudioContext | null>(null)
   const masterRef = useRef<GainNode | null>(null)
@@ -81,11 +102,17 @@ export function ChipRadioProvider({ children }: { children: ReactNode }): ReactE
   const stepRef = useRef(0)
   const playingRef = useRef(false)
   const trackIdxRef = useRef(0)
+  const playlistRef = useRef<PlaylistId>(playlist)
   const volumeRef = useRef(volume)
   const reducedRef = useRef(reduced)
 
+  const tracks = useMemo(() => filterTracks(playlist), [playlist])
+  const track = tracks[Math.min(trackIdx, tracks.length - 1)] ?? TRACKS[0]
+  const duration = loopDuration(track)
+
   volumeRef.current = volume
-  trackIdxRef.current = trackIdx
+  trackIdxRef.current = Math.min(trackIdx, tracks.length - 1)
+  playlistRef.current = playlist
   playingRef.current = playing
   reducedRef.current = reduced
 
@@ -96,6 +123,7 @@ export function ChipRadioProvider({ children }: { children: ReactNode }): ReactE
     }
     playingRef.current = false
     setPlaying(false)
+    setElapsed(0)
     setEq([0.2, 0.2, 0.2, 0.2, 0.2])
   }, [])
 
@@ -152,17 +180,18 @@ export function ChipRadioProvider({ children }: { children: ReactNode }): ReactE
   }, [])
 
   const tick = useCallback((): void => {
-    const track = TRACKS[trackIdxRef.current]
-    const melody = MELODIES[track.id]
+    const list = filterTracks(playlistRef.current)
+    const cur = list[trackIdxRef.current] ?? TRACKS[0]
+    const melody = MELODIES[cur.id]
     const step = stepRef.current % melody.length
     const note = melody[step]
-    const sixteenth = 60 / track.bpm / 4
-    const lofi = track.vibe === "lofi"
+    const sixteenth = 60 / cur.bpm / 4
+    const lofi = cur.vibe === "lofi"
 
     if (note >= 0) {
       const wave: OscillatorType = lofi
         ? "triangle"
-        : track.id === "deploy"
+        : cur.id === "deploy"
           ? "square"
           : "triangle"
       beep(midiToFreq(note), sixteenth * (lofi ? 1.4 : 0.85), wave, lofi ? 0.1 : 0.18)
@@ -172,6 +201,7 @@ export function ChipRadioProvider({ children }: { children: ReactNode }): ReactE
     if (!lofi && step % 8 === 4) beep(midiToFreq(36), sixteenth * 0.5, "square", 0.12)
 
     stepRef.current = step + 1
+    setElapsed((stepRef.current * sixteenth) % loopDuration(cur))
 
     if (!reducedRef.current) {
       setEq([
@@ -188,9 +218,11 @@ export function ChipRadioProvider({ children }: { children: ReactNode }): ReactE
     const ctx = ensureCtx()
     if (ctx.state === "suspended") await ctx.resume()
     if (timerRef.current !== null) window.clearInterval(timerRef.current)
-    const track = TRACKS[trackIdxRef.current]
-    const intervalMs = (60 / track.bpm / 4) * 1000
+    const list = filterTracks(playlistRef.current)
+    const cur = list[trackIdxRef.current] ?? TRACKS[0]
+    const intervalMs = (60 / cur.bpm / 4) * 1000
     stepRef.current = 0
+    setElapsed(0)
     playingRef.current = true
     setPlaying(true)
     tick()
@@ -217,8 +249,10 @@ export function ChipRadioProvider({ children }: { children: ReactNode }): ReactE
 
   const playTrack = useCallback(
     (idx: number): void => {
-      setTrackIdx(idx)
-      trackIdxRef.current = idx
+      const list = filterTracks(playlistRef.current)
+      const safe = ((idx % list.length) + list.length) % list.length
+      setTrackIdx(safe)
+      trackIdxRef.current = safe
       stop()
       window.setTimeout(() => void startEngine(), 30)
     },
@@ -226,24 +260,68 @@ export function ChipRadioProvider({ children }: { children: ReactNode }): ReactE
   )
 
   const nextTrack = useCallback((): void => {
-    playTrack((trackIdxRef.current + 1) % TRACKS.length)
+    const list = filterTracks(playlistRef.current)
+    playTrack((trackIdxRef.current + 1) % list.length)
   }, [playTrack])
+
+  const prevTrack = useCallback((): void => {
+    const list = filterTracks(playlistRef.current)
+    playTrack((trackIdxRef.current - 1 + list.length) % list.length)
+  }, [playTrack])
+
+  const setPlaylist = useCallback(
+    (id: PlaylistId): void => {
+      setPlaylistState(id)
+      playlistRef.current = id
+      setTrackIdx(0)
+      trackIdxRef.current = 0
+      if (playingRef.current) {
+        stop()
+        window.setTimeout(() => void startEngine(), 30)
+      } else {
+        setElapsed(0)
+      }
+    },
+    [startEngine, stop],
+  )
 
   const value = useMemo<ChipRadioApi>(
     () => ({
-      tracks: TRACKS,
-      trackIdx,
-      track: TRACKS[trackIdx],
+      tracks,
+      allTracks: TRACKS,
+      trackIdx: Math.min(trackIdx, tracks.length - 1),
+      track,
       playing,
       volume,
       eq,
+      playlist,
+      elapsed,
+      duration,
       setVolume,
+      setPlaylist,
       togglePlay,
       nextTrack,
+      prevTrack,
       playTrack,
       stop,
     }),
-    [trackIdx, playing, volume, eq, togglePlay, nextTrack, playTrack, stop],
+    [
+      tracks,
+      trackIdx,
+      track,
+      playing,
+      volume,
+      eq,
+      playlist,
+      elapsed,
+      duration,
+      setPlaylist,
+      togglePlay,
+      nextTrack,
+      prevTrack,
+      playTrack,
+      stop,
+    ],
   )
 
   return <ChipRadioContext.Provider value={value}>{children}</ChipRadioContext.Provider>

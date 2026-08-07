@@ -1,6 +1,7 @@
 import type { ReactElement } from "react"
 import { useTheme } from "@/hooks/useTheme"
 import { useClock } from "@/hooks/useClock"
+import { useSfx } from "@/hooks/useSfx"
 
 function SunIcon(): ReactElement {
   return (
@@ -19,9 +20,14 @@ function MoonIcon(): ReactElement {
   )
 }
 
-export function Sysbar(): ReactElement {
+interface SysbarProps {
+  onOpenChangelog?: () => void
+}
+
+export function Sysbar({ onOpenChangelog }: SysbarProps): ReactElement {
   const { theme, toggleTheme } = useTheme()
   const clock = useClock()
+  const { muted, toggleMute } = useSfx()
 
   return (
     <nav
@@ -32,12 +38,32 @@ export function Sysbar(): ReactElement {
         <div className="shrink-0 font-bold text-ink">
           <span className="text-accent">DANIIL</span>
           <span className="text-ink">.OS</span>
-          <span className="ml-1.5 text-ink-soft">v1.0</span>
+          {onOpenChangelog ? (
+            <button
+              type="button"
+              onClick={onOpenChangelog}
+              className="ml-1.5 text-ink-soft underline-offset-2 hover:text-accent hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+              title="Open changelog"
+            >
+              v1.0
+            </button>
+          ) : (
+            <span className="ml-1.5 text-ink-soft">v1.0</span>
+          )}
         </div>
-        <div className="flex items-center gap-3 sm:gap-4">
+        <div className="flex items-center gap-2 sm:gap-3">
           <time className="hidden text-ink-soft tabular-nums sm:inline" dateTime={clock} aria-live="polite">
             {clock}
           </time>
+          <button
+            type="button"
+            onClick={toggleMute}
+            aria-label={muted ? "Unmute UI sounds" : "Mute UI sounds"}
+            title={muted ? "sfx off" : "sfx on"}
+            className="flex size-11 items-center justify-center border-2 border-line bg-bg font-mono text-[10px] tracking-[0.08em] text-ink shadow-[2px_2px_0_var(--line)] transition-[box-shadow,transform] hover:-translate-x-px hover:-translate-y-px hover:shadow-[3px_3px_0_var(--line)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          >
+            {muted ? "SFX∅" : "SFX"}
+          </button>
           <button
             type="button"
             onClick={toggleTheme}

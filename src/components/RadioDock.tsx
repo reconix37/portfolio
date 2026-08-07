@@ -1,19 +1,27 @@
-import { useEffect, useState, type ReactElement } from "react"
-import { useChipRadio } from "@/lib/chipRadio"
+import { useState, type ReactElement } from "react"
+import { useChipRadio, type PlaylistId } from "@/lib/chipRadio"
 import { cn } from "@/lib/utils"
 
 const STORAGE_KEY = "daniil-os-radio-open"
+const PLAYLISTS: { id: PlaylistId; label: string; path: string }[] = [
+  { id: "all", label: "ALL", path: "~/music" },
+  { id: "chip", label: "CHIP", path: "~/music/chip" },
+  { id: "lofi", label: "LOFI", path: "~/music/lofi" },
+]
+
+function fmt(sec: number): string {
+  const s = Math.max(0, Math.floor(sec))
+  const m = Math.floor(s / 60)
+  const r = s % 60
+  return `${m}:${r.toString().padStart(2, "0")}`
+}
 
 interface RadioDockProps {
-  /** контролируемый open снаружи (опционально) */
   open?: boolean
   onOpenChange?: (open: boolean) => void
 }
 
-/**
- * Плеер в потоке страницы (как MOCP у deploychan) — не fixed overlay.
- * Можно закрыть; reopen — компактная кнопка.
- */
+/** Плеер в потоке — progress + time + playlist switcher. */
 export function RadioDock({ open: openProp, onOpenChange }: RadioDockProps): ReactElement {
   const {
     tracks,
@@ -22,13 +30,18 @@ export function RadioDock({ open: openProp, onOpenChange }: RadioDockProps): Rea
     playing,
     volume,
     eq,
+    playlist,
+    elapsed,
+    duration,
     setVolume,
+    setPlaylist,
     togglePlay,
     nextTrack,
+    prevTrack,
     playTrack,
     stop,
   } = useChipRadio()
-  const [progress, setProgress] = useState(0)
+
   const [internalOpen, setInternalOpen] = useState(() => {
     try {
       const v = localStorage.getItem(STORAGE_KEY)
@@ -39,6 +52,8 @@ export function RadioDock({ open: openProp, onOpenChange }: RadioDockProps): Rea
   })
 
   const open = openProp ?? internalOpen
+  const progress = duration > 0 ? Math.min(100, (elapsed / duration) * 100) : 0
+  const path = PLAYLISTS.find((p) => p.id === playlist)?.path ?? "~/music"
 
   const setOpen = (next: boolean): void => {
     if (openProp === undefined) setInternalOpen(next)
@@ -51,17 +66,10 @@ export function RadioDock({ open: openProp, onOpenChange }: RadioDockProps): Rea
     if (!next) stop()
   }
 
-  useEffect(() => {
-    if (!playing) return
-    const id = window.setInterval(() => {
-      setProgress((p) => (p >= 100 ? 0 : p + 1.2))
-    }, 200)
-    return () => window.clearInterval(id)
-  }, [playing, track.id])
-
-  useEffect(() => {
-    setProgress(0)
-  }, [track.id])
+  const cyclePlaylist = (): void => {
+    const i = PLAYLISTS.findIndex((p) => p.id === playlist)
+    setPlaylist(PLAYLISTS[(i + 1) % PLAYLISTS.length].id)
+  }
 
   if (!open) {
     return (
@@ -108,17 +116,22 @@ export function RadioDock({ open: openProp, onOpenChange }: RadioDockProps): Rea
 
       <div className="grid gap-4 p-4 md:grid-cols-[1fr_1.1fr]">
         <div>
-          <div className="mb-2 truncate font-mono text-xs tracking-[0.06em] text-ink uppercase">
-            <span className="text-muted">~/music/</span>
+          <button
+            type="button"
+            onClick={cyclePlaylist}
+            title="Switch playlist"
+            className="mb-2 truncate font-mono text-xs tracking-[0.06em] text-ink uppercase hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          >
+            <span className="text-muted">{path}/</span>
             <span className="text-accent">{track.name}</span>
             <span className="ml-2 text-muted">{track.bpm}bpm</span>
             {track.vibe === "lofi" && (
               <span className="ml-2 border border-line px-1 text-[9px] text-muted">lofi</span>
             )}
-          </div>
+          </button>
 
           <div
-            className="mb-3 h-2 w-full border-2 border-line bg-bg"
+            className="mb-1.5 h-2 w-full border-2 border-line bg-bg"
             role="progressbar"
             aria-valuenow={Math.round(progress)}
             aria-valuemin={0}
@@ -127,11 +140,18 @@ export function RadioDock({ open: openProp, onOpenChange }: RadioDockProps): Rea
           >
             <div
               className={cn(
-                "h-full bg-accent transition-[width] duration-200",
+                "h-full bg-accent transition-[width] duration-150",
                 !playing && "opacity-40",
               )}
               style={{ width: `${playing ? progress : 0}%` }}
             />
+          </div>
+          <div className="mb-3 flex justify-between font-mono text-[10px] tracking-[0.08em] text-muted tabular-nums">
+            <span>{fmt(elapsed)}</span>
+            <span>
+              {String(trackIdx + 1).padStart(2, "0")} / {String(tracks.length).padStart(2, "0")}
+            </span>
+            <span>{fmt(duration)}</span>
           </div>
 
           <div className="mb-3 flex h-8 items-end gap-1" aria-hidden="true">
@@ -147,7 +167,34 @@ export function RadioDock({ open: openProp, onOpenChange }: RadioDockProps): Rea
             ))}
           </div>
 
+          <div className="mb-3 flex flex-wrap gap-1.5">
+            {PLAYLISTS.map((p) => (
+              <button
+                key={p.id}
+                type="button"
+                onClick={() => setPlaylist(p.id)}
+                className={cn(
+                  "min-h-9 border-2 border-line px-2.5 font-mono text-[10px] tracking-[0.1em] uppercase",
+                  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent",
+                  playlist === p.id
+                    ? "bg-accent text-bg dark:text-[#121110]"
+                    : "bg-bg hover:bg-surface-2",
+                )}
+              >
+                {p.label}
+              </button>
+            ))}
+          </div>
+
           <div className="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={prevTrack}
+              aria-label="Previous track"
+              className="flex min-h-11 items-center justify-center border-2 border-line bg-bg px-3 font-mono text-[11px] tracking-[0.1em] uppercase shadow-[3px_3px_0_var(--line)] transition-[box-shadow,transform] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0_var(--line)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            >
+              prev
+            </button>
             <button
               type="button"
               onClick={togglePlay}
