@@ -3,7 +3,9 @@
 Персональный сайт Даниила Верховского (AI/ML engineer). Концепция: сайт играет роль персональной ОС «DANIIL OS» — терминальный вход, окна-секции, маскот-агент, системные метаданные (версия, локальное время). Вайб: нео-брутализм/old-web (референс: mcp.deploychan.webcam — KISA; poolsuite.net — сайт-роль).
 
 ## Стек
-Vite + React 19 + TypeScript + Tailwind CSS v4 + shadcn/ui. Токены уже настроены в `src/index.css` (палитра из DESIGN.md: крем #F4EFE6, графит #1F1D1A, терракот #C45C4A, жёлтый #E0A458, зелёный #5C7A5C; hard shadows 4px 4px 0; radius = 0). Шрифты: Syne (заголовки), Space Mono (всё остальное). НЕ менять токены без согласования.
+Vite + React 19 + TypeScript + Tailwind CSS v4 + shadcn/ui + React Bits (reactbits.dev, точечно). Токены уже настроены в `src/index.css` (палитра из DESIGN.md: крем #F4EFE6, графит #1F1D1A, терракот #C45C4A, жёлтый #E0A458, зелёный #5C7A5C; hard shadows 4px 4px 0; radius = 0). Шрифты: Syne (заголовки), Space Mono (всё остальное). НЕ менять токены без согласования.
+
+shadcn компоненты добавлять через `npx shadcn@latest add <name>` — они лягут в `src/components/ui/`. React Bits — только выборочно (3-5 фишек, не всё подряд): typewriter/текст-эффекты для hero, шейдер-фон, magnetic/tilt для окон, cursor effects. Бездумный набор компонентов React Bits = AI-слоп, это запрещено.
 
 ## Железные правила (нарушение = переделка)
 
