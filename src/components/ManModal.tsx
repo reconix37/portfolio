@@ -8,7 +8,7 @@ interface ManModalProps {
 const SECTIONS: { h: string; body: string }[] = [
   {
     h: "NAME",
-    body: "daniil-os — a portfolio pretending to be an OS. Everything here is real, except the window buttons.",
+    body: "gaplik — a portfolio pretending to be an OS. Everything here is real, except the window buttons.",
   },
   {
     h: "TABS",
@@ -32,7 +32,7 @@ const SECTIONS: { h: string; body: string }[] = [
   },
 ]
 
-/** man daniil-os — оверлей справки (?). */
+/** man gaplik — оверлей справки (?). */
 export function ManModal({ open, onClose }: ManModalProps): ReactElement | null {
   if (!open) return null
 
@@ -50,7 +50,7 @@ export function ManModal({ open, onClose }: ManModalProps): ReactElement | null 
       >
         <div className="sticky top-0 flex items-center justify-between border-b-2 border-line bg-surface-2 px-3 py-2 font-mono text-[11px] tracking-[0.1em] uppercase">
           <span>
-            <span className="text-accent">MAN</span> daniil-os(1)
+            <span className="text-accent">MAN</span> gaplik(1)
           </span>
           <button
             type="button"
@@ -63,7 +63,7 @@ export function ManModal({ open, onClose }: ManModalProps): ReactElement | null 
         </div>
         <div className="space-y-4 p-5 font-mono text-sm">
           <h2 id="man-title" className="font-display text-[clamp(22px,3vw,28px)] tracking-normal">
-            DANIIL OS — MANUAL
+            Gaplik — MANUAL
           </h2>
           {SECTIONS.map((s) => (
             <div key={s.h}>

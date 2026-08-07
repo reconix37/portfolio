@@ -21,7 +21,7 @@ export function AppFrame({ children, onOpenMap, onOpenMan }: AppFrameProps): Rea
           ×
         </span>
         <span className="ml-2 font-mono text-[10px] tracking-[0.14em] text-muted uppercase" aria-hidden="true">
-          daniil-os.app
+          gaplik.app
         </span>
         <div className="ml-auto flex items-center gap-1.5">
           {onOpenMap && (
@@ -39,7 +39,7 @@ export function AppFrame({ children, onOpenMap, onOpenMan }: AppFrameProps): Rea
               onClick={onOpenMan}
               className="flex size-9 items-center justify-center border-2 border-line bg-bg font-mono text-xs hover:bg-accent hover:text-bg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent dark:hover:text-[#121110]"
               aria-label="Open man page"
-              title="man daniil-os (?)"
+              title="man gaplik (?)"
             >
               ?
             </button>

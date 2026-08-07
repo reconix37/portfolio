@@ -295,7 +295,7 @@ export function Terminal(): ReactElement {
         <i className="size-2.5 border-2 border-line bg-accent-2" aria-hidden="true" />
         <i className="size-2.5 border-2 border-line bg-ok" aria-hidden="true" />
         <span className="ml-2.5 text-[11px] tracking-[0.12em] text-ink-soft uppercase">
-          daniil@os: ~ — bash
+          daniil@gaplik: ~ — bash
         </span>
       </div>
 

@@ -34,7 +34,7 @@ export function Footer({ onOpenChangelog }: FooterProps): ReactElement {
     <footer className="border-t-2 border-line bg-surface">
       <div className="wrap flex flex-wrap items-center justify-between gap-3 py-3 text-xs tracking-[0.1em] text-ink-soft uppercase">
         <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
-          <b className="font-bold text-ok">DANIIL OS</b>
+          <b className="font-bold text-ok">Gaplik</b>
           {onOpenChangelog ? (
             <button
               type="button"

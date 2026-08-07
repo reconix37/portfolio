@@ -20,7 +20,7 @@ export function TabBar({ active, onChange }: TabBarProps): ReactElement {
   return (
     <div
       role="tablist"
-      aria-label="DANIIL OS sections"
+      aria-label="Gaplik sections"
       className="flex gap-1.5 overflow-x-auto border-b-2 border-line bg-surface px-2 py-2 md:px-3"
     >
       {TABS.map((tab) => {

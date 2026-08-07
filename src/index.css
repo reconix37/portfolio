@@ -3,7 +3,7 @@
 @import "shadcn/tailwind.css";
 
 /* ============================================================
-   DANIIL OS v1.0 — design tokens (from DESIGN.md)
+   Gaplik v1.0 — design tokens (from DESIGN.md)
    ============================================================ */
 @custom-variant dark (&:where(.dark, .dark *));
 

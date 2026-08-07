@@ -40,7 +40,7 @@ export function FsMapModal({
       >
         <div className="flex items-center justify-between border-b-2 border-line bg-surface-2 px-3 py-2 font-mono text-[11px] tracking-[0.1em] uppercase">
           <span>
-            <span className="text-accent">LS</span> /daniil-os
+            <span className="text-accent">LS</span> /gaplik
           </span>
           <button
             type="button"

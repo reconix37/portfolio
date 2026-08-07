@@ -5,7 +5,7 @@ const ENTRIES = [
     ver: "v1.0",
     date: "2026-08",
     items: [
-      "Tabbed DANIIL OS shell (no scroll-landing)",
+      "Tabbed Gaplik shell (no scroll-landing)",
       "WHOAMI polaroid · stats · terminal · chipradio",
       "PROJECTS catalog — filter, sort, poke at numbers",
       "FAKE NEWS ticker (nothing here is true, obviously) · boot modal · mascot moods",
@@ -46,7 +46,7 @@ export function ChangelogModal({ open, onClose }: ChangelogModalProps): ReactEle
       >
         <div className="sticky top-0 flex items-center justify-between border-b-2 border-line bg-surface-2 px-3 py-2 font-mono text-[11px] tracking-[0.1em] uppercase">
           <span>
-            <span className="text-accent">CHANGELOG.md</span> · daniil-os
+            <span className="text-accent">CHANGELOG.md</span> · gaplik
           </span>
           <button
             type="button"

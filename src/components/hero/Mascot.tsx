@@ -98,7 +98,7 @@ export function Mascot({
       )}
       style={{ width: size, height: size }}
       role="img"
-      aria-label={`DANIIL OS mascot — ${displayMood}`}
+      aria-label={`Gaplik mascot — ${displayMood}`}
       onClick={interactive ? onClick : undefined}
       onKeyDown={
         interactive

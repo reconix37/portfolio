@@ -4,13 +4,13 @@ import { useSfx } from "@/hooks/useSfx"
 
 const BOOT_KEY = "daniil-os-booted"
 const LINES = [
-  { t: "$ cd /var/daniil-os", cls: "cmd" as const },
+  { t: "$ cd /var/gaplik", cls: "cmd" as const },
   { t: "$ ./boot.sh", cls: "cmd" as const },
   { t: "[OK] cream/graphite/terracotta theme loaded (as nature intended)", cls: "ok" as const },
   { t: "[OK] tabs mounted · whoami/projects/stack/…", cls: "ok" as const },
   { t: "[OK] radio daemon spawned — real tracks, no oscillators harmed", cls: "ok" as const },
   { t: "[OK] mascot sprites warmed up", cls: "ok" as const },
-  { t: "[ READY ] daniil os v1.0 online — coffee in hand_", cls: "ready" as const },
+  { t: "[ READY ] gaplik v1.0 online — coffee in hand_", cls: "ready" as const },
 ]
 
 interface BootModalProps {
@@ -65,7 +65,7 @@ export function BootModal({ onDone }: BootModalProps): ReactElement | null {
       <div className="w-full max-w-lg border-2 border-line bg-surface shadow-[var(--shadow-hover)]">
         <div className="flex items-center justify-between border-b-2 border-line bg-surface-2 px-3 py-2 font-mono text-[11px] tracking-[0.1em] uppercase">
           <span>
-            <span className="text-accent">BOOT.SH</span> user@daniil-os ~ $
+            <span className="text-accent">BOOT.SH</span> user@gaplik ~ $
           </span>
           <button
             type="button"
@@ -84,7 +84,7 @@ export function BootModal({ onDone }: BootModalProps): ReactElement | null {
           <h2 id="boot-title" className="mb-4 text-[clamp(22px,3vw,28px)]">
             BOOT{" "}
             <span className="inline-block bg-accent px-1.5 py-0.5 text-bg dark:text-[#121110]">
-              DANIIL OS
+              Gaplik
             </span>
             ?
           </h2>
