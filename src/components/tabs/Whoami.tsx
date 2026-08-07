@@ -1,5 +1,5 @@
 import { forwardRef, type ReactElement } from "react"
-import { Mascot, MASCOT_SIZE_HERO, type Mood } from "@/components/hero/Mascot"
+import { Mascot, type Mood } from "@/components/hero/Mascot"
 import { Terminal } from "@/components/hero/Terminal"
 import { Band } from "@/components/Band"
 import { SectionLabel } from "@/components/SectionLabel"
@@ -67,7 +67,7 @@ export const Whoami = forwardRef<HTMLElement, WhoamiProps>(function Whoami(
               <div className="relative border-2 border-line bg-accent-2">
                 <Mascot
                   mood={mood}
-                  size={MASCOT_SIZE_HERO}
+                  size={240}
                   interactive
                   onMoodBurst={onMood}
                 />
@@ -94,13 +94,8 @@ export const Whoami = forwardRef<HTMLElement, WhoamiProps>(function Whoami(
           </div>
         </div>
 
-        {/* терминал — полная ширина под hero */}
-        <div className="mb-8">
-          <Terminal />
-        </div>
-
-        {/* stats — как у deploychan */}
-        <div className="grid grid-cols-2 border-t-2 border-line md:grid-cols-4">
+        {/* stats сразу под hero — как у deploychan, в первом экране */}
+        <div className="mb-8 grid grid-cols-2 border-y-2 border-line md:grid-cols-4">
           {STATS.map((s, i) => (
             <div
               key={s.label}
@@ -117,6 +112,11 @@ export const Whoami = forwardRef<HTMLElement, WhoamiProps>(function Whoami(
               </div>
             </div>
           ))}
+        </div>
+
+        {/* терминал — под stats */}
+        <div className="mb-2">
+          <Terminal />
         </div>
       </div>
       <Band />
