@@ -21,7 +21,13 @@ export const Hero = forwardRef<HTMLElement, HeroProps>(function Hero(
           <p className="mb-5 text-[13px] tracking-[0.14em] text-muted uppercase">
             <b className="font-bold text-accent">system online</b>
             {" — "}
-            ai/ml engineer · presov
+            <span className="inline-block bg-accent px-1.5 py-0.5 font-bold text-[var(--bg)]">
+              AI/ML
+            </span>{" "}
+            <span className="inline-block bg-accent px-1.5 py-0.5 font-bold text-[var(--bg)]">
+              ENGINEER
+            </span>
+            {" · presov"}
           </p>
 
           <h1 className="mb-2 text-[clamp(40px,6vw,78px)]">
