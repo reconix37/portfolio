@@ -81,7 +81,7 @@ export function Projects({ onMood }: ProjectsProps): ReactElement {
         <Reveal>
           <Window num="01" title="PROJECTS">
             <h2 className="mb-5 text-[clamp(26px,4vw,40px)]">
-              What I&apos;ve <span className="text-accent">built</span>
+              SHIPPED <span className="text-accent">MODULES</span>
               <SectionBadge text="// 4 shipped" />
             </h2>
             <p className="mb-9 max-w-[620px] text-ink-soft">

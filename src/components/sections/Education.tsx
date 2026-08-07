@@ -19,7 +19,7 @@ export function Education(): ReactElement {
         <Reveal>
           <Window num="03" title="EDUCATION">
             <h2 className="mb-5 text-[clamp(26px,4vw,40px)]">
-              School of <span className="text-accent">hard knocks</span>
+              TRAINING <span className="text-accent">HISTORY</span>
               <SectionBadge text="// in progress" />
             </h2>
             <p className="mb-9 max-w-[620px] text-ink-soft">

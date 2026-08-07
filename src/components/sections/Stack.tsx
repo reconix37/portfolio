@@ -91,7 +91,7 @@ export function Stack(): ReactElement {
         <Reveal>
           <Window num="02" title="STACK">
             <h2 className="mb-5 text-[clamp(26px,4vw,40px)]">
-              Toolkit <span className="text-accent">{"//"}</span>
+              LOADED <span className="text-accent">KERNEL</span>
               <SectionBadge text="// loaded" />
             </h2>
             <p className="mb-9 max-w-[620px] text-ink-soft">

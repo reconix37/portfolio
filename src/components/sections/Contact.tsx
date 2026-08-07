@@ -69,7 +69,7 @@ export function Contact(): ReactElement {
         <Reveal>
           <Window num="04" title="CONTACT">
             <h2 className="mb-5 text-[clamp(26px,4vw,40px)]">
-              Let&apos;s <span className="text-accent">talk</span>
+              ESTABLISH <span className="text-accent">CONNECTION</span>
               <SectionBadge text="// 24h response" />
             </h2>
             <p className="mb-9 max-w-[620px] text-ink-soft">
